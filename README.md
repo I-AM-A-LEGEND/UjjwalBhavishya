@@ -19,6 +19,6 @@ Judge is a modern, AI-powered web application designed to help citizens discover
 - **Frontend:** React, Vite, Tailwind CSS, shadcn/ui
 - **Backend:** Node.js, Express.js, TypeScript
 - **Database:** PostgreSQL with Drizzle ORM, hosted on NeonDB
-- **AI & Machine Learning:** Google Gemini for the chatbot, recommendations, and translation services.
+- **AI & Machine Learning:** Google Gemini for the chatbot, recommendations.
 - **Authentication:** JWT (JSON Web Tokens) with Passport.js for secure authentication.
 - **Real-time Communication:** WebSockets for instant notifications.
