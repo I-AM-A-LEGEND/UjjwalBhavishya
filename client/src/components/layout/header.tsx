@@ -51,9 +51,11 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo and Title */}
           <div className="flex items-center space-x-4" onClick={() => navigate("/")} data-testid="header-logo">
-            <div className="w-8 h-8 bg-gradient-to-b from-orange-500 via-white to-green-600 rounded border"></div>
+            <div className="w-8 h-8 bg-gradient-to-b from-orange-500 via-white to-green-600 rounded border flex items-center justify-center">
+              🇮🇳
+            </div>
             <div className="cursor-pointer">
-              <h1 className="text-xl font-bold text-primary">SarkarConnect</h1>
+              <h1 className="text-xl font-bold text-primary">Ujjwal Bhavishya Portal</h1>
               <p className="text-xs text-muted-foreground">Government of India</p>
             </div>
           </div>

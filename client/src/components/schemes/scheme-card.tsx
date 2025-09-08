@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
+import { useTranslation } from 'react-i18next';
 
 interface Scheme {
   id: string;
@@ -39,6 +40,7 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
   const [isExpanded, setIsExpanded] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const currentUserId = userId || user?.id;
 
   const checkEligibilityMutation = useMutation({

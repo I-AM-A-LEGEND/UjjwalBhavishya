@@ -59,13 +59,33 @@ const resources = {
         chooseAPassword: "Choose a password",
         enterYourEmail: "Enter your email",
         invalidEmailAddress: "Invalid email address",
-        sarkarBot: "SarkarBot",
+        sarkarBot: "UjjwalBot",
         online: "Online",
         offline: "Offline",
-        typeYourQuestion: "Type your question..."
+        typeYourQuestion: "Type your question...",
+        schemes: "Schemes",
+        applyNow: "Apply Now",
+        checkEligibility: "Check Eligibility",
+        checkStatus: "Check Status",
+        viewDetails: "View Details",
+        hideDetails: "Hide Details",
+        showAIAnalysis: "Show AI Analysis",
+        benefits: "Benefits",
+        eligibleCategories: "Eligible Categories",
+        maxIncome: "Max Income",
+        noLimit: "No limit",
+        allIndia: "All India",
+        highlyRecommended: "Highly Recommended",
+        partiallyEligible: "Partially Eligible",
+        match: "match",
+        applying: "Applying...",
+        checking: "Checking...",
+        loginRequired: "Login Required",
+        pleaseLoginToCheckEligibility: "Please login to check eligibility.",
+        pleaseLoginToApply: "Please login to apply for schemes."
       },
       chatbot: {
-        welcomeMessage: "Hello! I'm SarkarBot, your AI assistant for government schemes and services. How can I help you today?"
+        welcomeMessage: "Hello! I'm UjjwalBot, your AI assistant for government schemes and services. How can I help you today?"
       }
     },
   },
@@ -125,13 +145,33 @@ const resources = {
         chooseAPassword: "एक पासवर्ड चुनें",
         enterYourEmail: "अपना ईमेल दर्ज करें",
         invalidEmailAddress: "अमान्य ईमेल पता",
-        sarkarBot: "सरकारबॉट",
+        sarkarBot: "उज्ज्वलबॉट",
         online: "ऑनलाइन",
         offline: "ऑफ़लाइन",
-        typeYourQuestion: "अपना प्रश्न टाइप करें..."
+        typeYourQuestion: "अपना प्रश्न टाइप करें...",
+        schemes: "योजनाएं",
+        applyNow: "अभी आवेदन करें",
+        checkEligibility: "पात्रता जांचें",
+        checkStatus: "स्थिति जांचें",
+        viewDetails: "विवरण देखें",
+        hideDetails: "विवरण छुपाएं",
+        showAIAnalysis: "AI विश्लेषण दिखाएं",
+        benefits: "लाभ",
+        eligibleCategories: "पात्र श्रेणियां",
+        maxIncome: "अधिकतम आय",
+        noLimit: "कोई सीमा नहीं",
+        allIndia: "अखिल भारत",
+        highlyRecommended: "अत्यधिक अनुशंसित",
+        partiallyEligible: "आंशिक रूप से पात्र",
+        match: "मैच",
+        applying: "आवेदन हो रहा है...",
+        checking: "जांच हो रहा है...",
+        loginRequired: "लॉगिन आवश्यक",
+        pleaseLoginToCheckEligibility: "पात्रता जांचने के लिए कृपया लॉगिन करें।",
+        pleaseLoginToApply: "योजनाओं के लिए आवेदन करने हेतु कृपया लॉगिन करें।"
       },
       chatbot: {
-        welcomeMessage: "नमस्ते! मैं सरकारबॉट हूं, सरकारी योजनाओं और सेवाओं के लिए आपका AI सहायक। आज मैं आपकी कैसे मदद कर सकता हूं?"
+        welcomeMessage: "नमस्ते! मैं उज्ज्वलबॉट हूं, सरकारी योजनाओं और सेवाओं के लिए आपका AI सहायक। आज मैं आपकी कैसे मदद कर सकता हूं?"
       }
     },
   },
