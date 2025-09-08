@@ -159,7 +159,7 @@ export function Chatbot() {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <MessageCircle className="h-5 w-5 mr-2" />
-                <span className="font-medium">{t("common.sarkarBot")}</span>
+                <span className="font-medium">Chat Help</span>
                 <Badge 
                   variant="secondary" 
                   className="ml-2 bg-primary-foreground/20 text-primary-foreground"
@@ -167,42 +167,15 @@ export function Chatbot() {
                   {isConnected ? t("common.online") : t("common.offline")}
                 </Badge>
               </div>
-              <div className="flex items-center space-x-2">
-                <Select value={i18n.language} onValueChange={(value) => i18n.changeLanguage(value)}>
-                  <SelectTrigger className="w-24 h-6 text-xs">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {[
-                      { code: "en", name: "English" },
-                      { code: "hi", name: "हिंदी" },
-                      { code: "bn", name: "বাংলা" },
-                      { code: "ta", name: "தமிழ்" },
-                      { code: "te", name: "తెలుగు" },
-                      { code: "mr", name: "मराठी" },
-                      { code: "gu", name: "ગુજરાતી" },
-                      { code: "kn", name: "ಕನ್ನಡ" },
-                      { code: "ml", name: "മലയാളം" },
-                      { code: "pa", name: "ਪੰਜਾਬੀ" },
-                      { code: "or", name: "ଓଡ଼ିଆ" },
-                      { code: "as", name: "অসমীয়া" }
-                    ].map((lang) => (
-                      <SelectItem key={lang.code} value={lang.code}>
-                        {lang.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 text-primary-foreground hover:bg-primary-foreground/20"
-                  onClick={() => setIsOpen(false)}
-                  data-testid="button-close-chatbot"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6 text-primary-foreground hover:bg-primary-foreground/20"
+                onClick={() => setIsOpen(false)}
+                data-testid="button-close-chatbot"
+              >
+                <X className="h-4 w-4" />
+              </Button>
             </div>
           </CardHeader>
           

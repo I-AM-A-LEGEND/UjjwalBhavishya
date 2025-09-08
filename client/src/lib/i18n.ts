@@ -63,6 +63,7 @@ const resources = {
         online: "Online",
         offline: "Offline",
         typeYourQuestion: "Type your question...",
+        listening: "Listening...",
         schemes: "Schemes",
         applyNow: "Apply Now",
         checkEligibility: "Check Eligibility",
@@ -129,7 +130,7 @@ const resources = {
         viewAllSchemes: "View All Schemes"
       },
       chatbot: {
-        welcomeMessage: "Hello! I'm UjjwalBot, your AI assistant for government schemes and services. How can I help you today?"
+        welcomeMessage: "Hello! I'm Chat Help, your friendly AI assistant for government schemes and services. How can I help you today?"
       }
     },
   },
@@ -259,7 +260,7 @@ const resources = {
         viewAllSchemes: "सभी योजनाएं देखें"
       },
       chatbot: {
-        welcomeMessage: "नमस्ते! मैं उज्ज्वलबॉट हूं, सरकारी योजनाओं और सेवाओं के लिए आपका AI सहायक। आज मैं आपकी कैसे मदद कर सकता हूं?"
+        welcomeMessage: "नमस्ते! मैं Chat Help हूं, सरकारी योजनाओं और सेवाओं के लिए आपका अनुकूल AI सहायक। आज मैं आपकी कैसे मदद कर सकता हूं?"
       }
     },
   },

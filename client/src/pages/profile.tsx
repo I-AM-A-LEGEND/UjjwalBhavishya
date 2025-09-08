@@ -88,41 +88,7 @@ export default function Profile() {
               </CardContent>
             </Card>
 
-            <Card className="mt-8">
-              <CardHeader>
-                <CardTitle>{t("common.languagePreference")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-4">
-                  <Select value={i18n.language} onValueChange={(value) => i18n.changeLanguage(value)}>
-                    <SelectTrigger className="w-32">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {[
-                        { code: "en", name: "English" },
-                        { code: "hi", name: "हिंदी" },
-                        { code: "bn", name: "বাংলা" },
-                        { code: "ta", name: "தமிழ்" },
-                        { code: "te", name: "తెలుగు" },
-                        { code: "mr", name: "मराठी" },
-                        { code: "gu", name: "ગુજરાતી" },
-                        { code: "kn", name: "ಕನ್ನಡ" },
-                        { code: "ml", name: "മലയാളം" },
-                        { code: "pa", name: "ਪੰਜਾਬੀ" },
-                        { code: "or", name: "ଓଡ଼ିଆ" },
-                        { code: "as", name: "অসমীয়া" }
-                      ].map((lang) => (
-                        <SelectItem key={lang.code} value={lang.code}>
-                          {lang.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Button onClick={handleSaveLanguage}>{t("common.save")}</Button>
-                </div>
-              </CardContent>
-            </Card>
+
           </>
         )}
       </div>
