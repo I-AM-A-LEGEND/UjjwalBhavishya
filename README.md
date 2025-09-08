@@ -10,7 +10,7 @@ Judge is a modern, AI-powered web application designed to help citizens discover
 - **Instant Eligibility Checks:** Allows users to quickly determine their eligibility for any scheme with a single click.
 - **Streamlined Online Applications:** A user-friendly application process with status tracking and real-time notifications.
 - **AI-Powered Chat Assistant:** A multilingual chatbot, powered by Google Gemini, to answer questions, provide guidance, and assist with navigating the platform.
-- **Grievance Redressal System:** An integrated system for users to submit and track the status of their grievances.
+- **Application Status:** direct link to Scheme site to view scheme status.
 - **Real-time Notifications:** Uses WebSockets to provide instant updates on application statuses and other important events.
 - **Multilingual Support:** Built-in translation services to make the platform accessible to a wider audience.
 
