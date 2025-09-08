@@ -70,7 +70,7 @@ export function LoginForm() {
           data-testid="login-username"
         />
         {form.formState.errors.username && (
-          <p className="text-sm text-red-600">{form.formState.errors.username.message}</p>
+          <p className="text-sm text-red-600">{t(form.formState.errors.username.message || "common.usernameRequired")}</p>
         )}
       </div>
       <div>
@@ -83,7 +83,7 @@ export function LoginForm() {
           data-testid="login-password"
         />
         {form.formState.errors.password && (
-          <p className="text-sm text-red-600">{form.formState.errors.password.message}</p>
+          <p className="text-sm text-red-600">{t(form.formState.errors.password.message || "common.passwordRequired")}</p>
         )}
       </div>
       <Button type="submit" className="w-full" disabled={loginMutation.isPending}>

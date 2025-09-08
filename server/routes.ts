@@ -6,6 +6,7 @@ import { generateChatResponse, translateText } from "./services/gemini";
 import { schemeService } from "./services/schemes";
 import { recommendationService } from "./services/recommendations";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { 
   insertUserSchema, insertCitizenProfileSchema, insertApplicationSchema,
   insertChatConversationSchema, insertChatMessageSchema, insertGrievanceSchema
@@ -67,7 +68,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const hashedPassword = await bcrypt.hash(userData.password, 10);
       const user = await storage.createUser({ ...userData, password: hashedPassword });
-      res.json({ user: { id: user.id, username: user.username, email: user.email } });
+      
+      // Generate JWT token
+      const token = jwt.sign(
+        { id: user.id, username: user.username },
+        process.env.JWT_SECRET || 'fallback-secret-key',
+        { expiresIn: '7d' }
+      );
+      
+      res.json({ 
+        user: { id: user.id, username: user.username, email: user.email },
+        token 
+      });
     } catch (error) {
       res.status(400).json({ message: "Invalid user data", error: error instanceof Error ? error.message : "Unknown error" });
     }
@@ -87,7 +99,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Invalid credentials" });
       }
 
-      res.json({ user: { id: user.id, username: user.username, email: user.email } });
+      // Generate JWT token
+      const token = jwt.sign(
+        { id: user.id, username: user.username },
+        process.env.JWT_SECRET || 'fallback-secret-key',
+        { expiresIn: '7d' }
+      );
+
+      res.json({ 
+        user: { id: user.id, username: user.username, email: user.email },
+        token 
+      });
     } catch (error) {
       res.status(500).json({ message: "Login failed" });
     }

@@ -72,7 +72,7 @@ export function RegisterForm() {
           data-testid="register-username"
         />
         {form.formState.errors.username && (
-          <p className="text-sm text-red-600">{form.formState.errors.username.message}</p>
+          <p className="text-sm text-red-600">{t(form.formState.errors.username.message || "common.usernameMinLength")}</p>
         )}
       </div>
       <div>
@@ -85,7 +85,7 @@ export function RegisterForm() {
           data-testid="register-email"
         />
         {form.formState.errors.email && (
-          <p className="text-sm text-red-600">{form.formState.errors.email.message}</p>
+          <p className="text-sm text-red-600">{t(form.formState.errors.email.message || "common.invalidEmailAddress")}</p>
         )}
       </div>
       <div>
@@ -98,7 +98,7 @@ export function RegisterForm() {
           data-testid="register-password"
         />
         {form.formState.errors.password && (
-          <p className="text-sm text-red-600">{form.formState.errors.password.message}</p>
+          <p className="text-sm text-red-600">{t(form.formState.errors.password.message || "common.passwordMinLength")}</p>
         )}
       </div>
       <Button type="submit" className="w-full" disabled={registerMutation.isPending}>
