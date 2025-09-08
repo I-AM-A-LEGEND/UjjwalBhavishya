@@ -7,10 +7,12 @@ import { SchemeCard } from "@/components/schemes/scheme-card";
 import { EligibilityChecker } from "@/components/schemes/eligibility-checker";
 import { Badge } from "@/components/ui/badge";
 import { useLocation } from "wouter";
+import { useTranslation } from 'react-i18next';
 import { Search, Play, Users, MapPin, Award, Accessibility } from "lucide-react";
 
 export default function Home() {
   const [, navigate] = useLocation();
+  const { t } = useTranslation();
 
   const { data: popularSchemes = [], isLoading: schemesLoading } = useQuery({
     queryKey: ["/api/schemes/popular"],
@@ -35,12 +37,11 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold text-foreground mb-4">
-                Find Government Schemes{" "}
-                <span className="text-primary">Made for You</span>
+                {t("common.findGovernmentSchemes")}{" "}
+                <span className="text-primary">{t("common.madeForYou")}</span>
               </h1>
               <p className="text-lg text-muted-foreground mb-6">
-                AI-powered platform to discover and apply for government schemes based on your socio-economic profile. 
-                Get personalized recommendations in real-time.
+                {t("common.aiPoweredPlatform")}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button 
@@ -50,7 +51,7 @@ export default function Home() {
                   className="flex items-center justify-center"
                 >
                   <Search className="mr-2 h-5 w-5" />
-                  Find My Schemes
+                  {t("common.findMySchemes")}
                 </Button>
                 <Button 
                   variant="outline" 
@@ -59,13 +60,13 @@ export default function Home() {
                   className="flex items-center justify-center"
                 >
                   <Play className="mr-2 h-5 w-5" />
-                  How It Works
+                  {t("common.howItWorks")}
                 </Button>
               </div>
             </div>
             <Card className="bg-card shadow-lg">
               <CardHeader>
-                <CardTitle>Quick Eligibility Check</CardTitle>
+                <CardTitle>{t("common.quickEligibilityCheck")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <EligibilityChecker />
@@ -81,19 +82,19 @@ export default function Home() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center" data-testid="stat-schemes">
               <div className="text-3xl font-bold text-primary mb-2">{stats.totalSchemes}</div>
-              <p className="text-muted-foreground">Government Schemes</p>
+              <p className="text-muted-foreground">{t("common.governmentSchemes")}</p>
             </div>
             <div className="text-center" data-testid="stat-beneficiaries">
               <div className="text-3xl font-bold text-primary mb-2">{stats.beneficiaries}</div>
-              <p className="text-muted-foreground">Beneficiaries</p>
+              <p className="text-muted-foreground">{t("common.beneficiaries")}</p>
             </div>
             <div className="text-center" data-testid="stat-states">
               <div className="text-3xl font-bold text-primary mb-2">{stats.states}</div>
-              <p className="text-muted-foreground">States & UTs</p>
+              <p className="text-muted-foreground">{t("common.statesUTs")}</p>
             </div>
             <div className="text-center" data-testid="stat-languages">
               <div className="text-3xl font-bold text-primary mb-2">{stats.languages}</div>
-              <p className="text-muted-foreground">Languages</p>
+              <p className="text-muted-foreground">{t("common.languages")}</p>
             </div>
           </div>
         </div>
@@ -103,9 +104,9 @@ export default function Home() {
       <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Platform Features</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-4">{t("common.platformFeatures")}</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Advanced AI technology combined with government data to provide personalized scheme recommendations
+              {t("common.advancedAiTechnology")}
             </p>
           </div>
           
@@ -189,9 +190,9 @@ export default function Home() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">Popular Schemes</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-4">{t("common.popularSchemes")}</h2>
             <p className="text-lg text-muted-foreground">
-              Discover government schemes that have helped millions of citizens
+              {t("common.discoverGovernmentSchemes")}
             </p>
           </div>
           
@@ -226,7 +227,7 @@ export default function Home() {
               onClick={() => navigate("/schemes")}
               data-testid="button-view-all-schemes"
             >
-              View All Schemes
+              {t("common.viewAllSchemes")}
             </Button>
           </div>
         </div>

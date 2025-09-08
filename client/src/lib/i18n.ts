@@ -82,7 +82,23 @@ const resources = {
         checking: "Checking...",
         loginRequired: "Login Required",
         pleaseLoginToCheckEligibility: "Please login to check eligibility.",
-        pleaseLoginToApply: "Please login to apply for schemes."
+        pleaseLoginToApply: "Please login to apply for schemes.",
+        // Home page translations
+        findGovernmentSchemes: "Find Government Schemes",
+        madeForYou: "Made for You",
+        aiPoweredPlatform: "AI-powered platform to discover and apply for government schemes based on your socio-economic profile. Get personalized recommendations in real-time.",
+        findMySchemes: "Find My Schemes",
+        howItWorks: "How It Works",
+        quickEligibilityCheck: "Quick Eligibility Check",
+        governmentSchemes: "Government Schemes",
+        beneficiaries: "Beneficiaries",
+        statesUTs: "States & UTs",
+        languages: "Languages",
+        platformFeatures: "Platform Features",
+        advancedAiTechnology: "Advanced AI technology combined with government data to provide personalized scheme recommendations",
+        popularSchemes: "Popular Schemes",
+        discoverGovernmentSchemes: "Discover government schemes that have helped millions of citizens",
+        viewAllSchemes: "View All Schemes"
       },
       chatbot: {
         welcomeMessage: "Hello! I'm UjjwalBot, your AI assistant for government schemes and services. How can I help you today?"
@@ -168,7 +184,23 @@ const resources = {
         checking: "जांच हो रहा है...",
         loginRequired: "लॉगिन आवश्यक",
         pleaseLoginToCheckEligibility: "पात्रता जांचने के लिए कृपया लॉगिन करें।",
-        pleaseLoginToApply: "योजनाओं के लिए आवेदन करने हेतु कृपया लॉगिन करें।"
+        pleaseLoginToApply: "योजनाओं के लिए आवेदन करने हेतु कृपया लॉगिन करें।",
+        // Home page translations
+        findGovernmentSchemes: "सरकारी योजनाएं खोजें",
+        madeForYou: "आपके लिए बनी",
+        aiPoweredPlatform: "आपकी सामाजिक-आर्थिक प्रोफाइल आधारित सरकारी योजनाएं खोजने और आवेदन करने के लिए AI-संचालित प्लेटफॉर्म। रीयल-टाइम में व्यक्तिगत सिफारिशें प्राप्त करें।",
+        findMySchemes: "मेरी योजनाएं खोजें",
+        howItWorks: "यह कैसे काम करता है",
+        quickEligibilityCheck: "त्वरित पात्रता जांच",
+        governmentSchemes: "सरकारी योजनाएं",
+        beneficiaries: "लाभार्थी",
+        statesUTs: "राज्य और केंद्रशासित प्रदेश",
+        languages: "भाषाएं",
+        platformFeatures: "प्लेटफॉर्म सुविधाएं",
+        advancedAiTechnology: "सरकारी डेटा के साथ जुड़ी उन्नत AI तकनीक व्यक्तिगत योजना सिफारिशें प्रदान करने के लिए",
+        popularSchemes: "लोकप्रिय योजनाएं",
+        discoverGovernmentSchemes: "लाखों नागरिकों की मदद करने वाली सरकारी योजनाएं खोजें",
+        viewAllSchemes: "सभी योजनाएं देखें"
       },
       chatbot: {
         welcomeMessage: "नमस्ते! मैं उज्ज्वलबॉट हूं, सरकारी योजनाओं और सेवाओं के लिए आपका AI सहायक। आज मैं आपकी कैसे मदद कर सकता हूं?"
