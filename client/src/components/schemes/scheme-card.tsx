@@ -95,8 +95,8 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
   const handleCheckEligibility = () => {
     if (!currentUserId) {
       toast({
-        title: "Login Required",
-        description: "Please login to check eligibility.",
+        title: t("common.loginRequired"),
+        description: t("common.pleaseLoginToCheckEligibility"),
         variant: "destructive"
       });
       return;
@@ -107,8 +107,8 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
   const handleApply = () => {
     if (!currentUserId) {
       toast({
-        title: "Login Required",
-        description: "Please login to apply for schemes.",
+        title: t("common.loginRequired"),
+        description: t("common.pleaseLoginToApply"),
         variant: "destructive"
       });
       return;
