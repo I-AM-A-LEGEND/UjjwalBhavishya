@@ -103,7 +103,7 @@ export default function Schemes() {
                   <SelectValue placeholder="All categories" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All categories</SelectItem>
+                  <SelectItem value="all">All categories</SelectItem>
                   {categories.map((category: string) => (
                     <SelectItem key={category} value={category}>
                       {category}
@@ -120,7 +120,7 @@ export default function Schemes() {
                   <SelectValue placeholder="All India" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All India</SelectItem>
+                  <SelectItem value="all">All India</SelectItem>
                   {states.map((state) => (
                     <SelectItem key={state} value={state}>
                       {state}
@@ -137,7 +137,7 @@ export default function Schemes() {
                   <SelectValue placeholder="Any income" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Any income</SelectItem>
+                  <SelectItem value="all">Any income</SelectItem>
                   <SelectItem value="100000">Below ₹1 Lakh</SelectItem>
                   <SelectItem value="300000">Below ₹3 Lakhs</SelectItem>
                   <SelectItem value="500000">Below ₹5 Lakhs</SelectItem>

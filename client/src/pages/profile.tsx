@@ -4,13 +4,37 @@ import { User } from "lucide-react";
 import { LanguageSelector } from "@/components/chatbot/language-selector";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Profile() {
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState("en"); // TODO: Load initial language from user profile
+  const { toast } = useToast();
+
+  const updateLanguageMutation = useMutation({
+    mutationFn: async (newLanguage: string) => {
+      // TODO: Replace 'user1' with actual authenticated user ID
+      const response = await apiRequest("PUT", `/api/profile/user1/language`, { language: newLanguage });
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Language Preference Updated",
+        description: `Your preferred language has been set to ${language}.`,
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Failed to Update Language",
+        description: `Error: ${error.message}`,
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleSaveLanguage = () => {
-    // TODO: Save language preference to the backend
-    console.log("Language preference saved:", language);
+    updateLanguageMutation.mutate(language);
   };
 
   return (

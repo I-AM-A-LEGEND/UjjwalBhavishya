@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { LanguageSelector } from "./language-selector";
 import { MessageCircle, X, Send, Mic, MicOff, Volume2 } from "lucide-react";
 import { useWebSocket } from "@/hooks/use-websocket";
