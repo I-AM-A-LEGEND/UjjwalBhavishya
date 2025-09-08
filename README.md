@@ -1,4 +1,4 @@
-# Judge: Your Intelligent Guide to Government Schemes
+# Ujjwal Bhavishya Portal: Your Intelligent Guide to Government Schemes
 
 Judge is a modern, AI-powered web application designed to help citizens discover, understand, and apply for government schemes in a seamless and personalized manner. It acts as a comprehensive digital assistant, simplifying access to public services and benefits.
 
@@ -10,7 +10,7 @@ Judge is a modern, AI-powered web application designed to help citizens discover
 - **Instant Eligibility Checks:** Allows users to quickly determine their eligibility for any scheme with a single click.
 - **Streamlined Online Applications:** A user-friendly application process with status tracking and real-time notifications.
 - **AI-Powered Chat Assistant:** A multilingual chatbot, powered by Google Gemini, to answer questions, provide guidance, and assist with navigating the platform.
-- **Grievance Redressal System:** An integrated system for users to submit and track the status of their grievances.
+- **Scheme status Check:** Direct urls to check there scheme status.
 - **Real-time Notifications:** Uses WebSockets to provide instant updates on application statuses and other important events.
 - **Multilingual Support:** Built-in translation services to make the platform accessible to a wider audience.
 
