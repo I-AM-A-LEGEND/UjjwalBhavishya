@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { LanguageSelector } from "./language-selector";
 import { MessageCircle, X, Send, Mic, MicOff, Volume2 } from "lucide-react";
 import { useWebSocket } from "@/hooks/use-websocket";
 import { useSpeech } from "@/hooks/use-speech";
@@ -143,10 +143,7 @@ export function Chatbot() {
     }
   };
 
-  const languages = [
-    { code: "en", name: "English" },
-    { code: "hi", name: "हिंदी" }
-  ];
+  
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -167,18 +164,7 @@ export function Chatbot() {
                 </Badge>
               </div>
               <div className="flex items-center space-x-2">
-                <select 
-                  value={language} 
-                  onChange={(e) => setLanguage(e.target.value)}
-                  className="text-xs bg-primary-foreground/20 text-primary-foreground rounded px-2 py-1"
-                  data-testid="select-chatbot-language"
-                >
-                  {languages.map((lang) => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.name}
-                    </option>
-                  ))}
-                </select>
+                <LanguageSelector onSelect={setLanguage} currentLanguage={language} />
                 <Button
                   variant="ghost"
                   size="icon"

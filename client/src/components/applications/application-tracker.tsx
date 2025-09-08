@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Search, CheckCircle, Clock, AlertCircle, FileText } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
+import { useWebSocket } from "@/hooks/use-websocket";
 
 interface ApplicationStatus {
   id: string;
@@ -24,6 +25,37 @@ interface ApplicationStatus {
 export function ApplicationTracker() {
   const [searchQuery, setSearchQuery] = useState("");
   const [trackedApplication, setTrackedApplication] = useState<ApplicationStatus | null>(null);
+  const { lastMessage, isConnected } = useWebSocket("ws://localhost:3000/ws");
+
+  useEffect(() => {
+    if (lastMessage) {
+      const data = JSON.parse(lastMessage.data);
+      if (data.type === "application_status_updated" && trackedApplication && data.data.id === trackedApplication.id) {
+        setTrackedApplication(prev => {
+          if (!prev) return null;
+          const newStatus = data.data.status;
+          const newTimeline = [...prev.timeline];
+          const lastStep = newTimeline[newTimeline.length - 1];
+          if (lastStep.status.toLowerCase() !== newStatus.toLowerCase()) {
+            lastStep.isCompleted = true;
+            newTimeline.push({
+              status: newStatus,
+              date: new Date().toLocaleDateString(),
+              description: `Status updated to ${newStatus}`,
+              isCompleted: false,
+            });
+          }
+
+          return {
+            ...prev,
+            status: newStatus,
+            lastUpdated: new Date().toLocaleDateString(),
+            timeline: newTimeline,
+          };
+        });
+      }
+    }
+  }, [lastMessage, trackedApplication]);
 
   // Mock application tracking - in production this would call actual government APIs
   const trackApplicationMutation = useMutation({

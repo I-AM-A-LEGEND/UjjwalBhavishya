@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
-import { openaiService } from "./services/openai";
+import { generateChatResponse, translateText } from "./services/gemini";
 import { schemeService } from "./services/schemes";
 import { recommendationService } from "./services/recommendations";
 import { 
@@ -131,6 +131,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await recommendationService.refreshRecommendations(req.params.userId);
       } catch (error) {
         console.error("Failed to refresh recommendations:", error);
+      }
+
+      res.json(profile);
+    } catch (error) {
+      res.status(400).json({ message: "Invalid update data", error: error instanceof Error ? error.message : "Unknown error" });
+    }
+  });
+
+  app.put("/api/profile/:userId/language", async (req, res) => {
+    try {
+      const { language } = req.body;
+      const profile = await storage.updateCitizenProfile(req.params.userId, { languagePreference: language });
+      
+      if (!profile) {
+        return res.status(404).json({ message: "Profile not found" });
       }
 
       res.json(profile);
@@ -331,10 +346,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }));
 
       // Generate AI response
-      const aiResponse = await openaiService.generateChatResponse(
+      const aiResponse = await generateChatResponse(
         messageData.content,
         conversation.language || "en",
-        undefined,
         conversationHistory
       );
 
@@ -383,7 +397,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/translate", async (req, res) => {
     try {
       const { text, targetLanguage } = req.body;
-      const translatedText = await openaiService.translateText(text, targetLanguage);
+      const translatedText = await translateText(text, targetLanguage);
       res.json({ translatedText });
     } catch (error) {
       res.status(500).json({ message: "Translation failed" });

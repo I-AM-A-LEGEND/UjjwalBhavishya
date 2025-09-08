@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, boolean, timestamp, jsonb, decimal } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, boolean, timestamp, jsonb, decimal, real } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -33,6 +33,7 @@ export const citizenProfiles = pgTable("citizen_profiles", {
   hasDisability: boolean("has_disability").default(false),
   disabilityType: text("disability_type"),
   bankAccount: text("bank_account"),
+  languagePreference: text("language_preference").default("en"),
   additionalDetails: jsonb("additional_details"),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -75,15 +76,15 @@ export const applications = pgTable("applications", {
   remarks: text("remarks"),
 });
 
+import { nanoid } from "nanoid";
 // AI recommendations
-export const recommendations = pgTable("recommendations", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  schemeId: varchar("scheme_id").notNull().references(() => schemes.id),
-  score: decimal("score", { precision: 3, scale: 2 }).notNull(), // 0.00 to 1.00
-  reasoning: text("reasoning"),
-  eligibilityStatus: text("eligibility_status").notNull(), // eligible, partially_eligible, not_eligible
-  generatedAt: timestamp("generated_at").defaultNow(),
+export const recommendations = pgTable('recommendations', {
+  id: text('id').primaryKey().$defaultFn(() => nanoid()),
+  userId: text('user_id').notNull().references(() => users.id),
+  schemeId: text('scheme_id').notNull().references(() => schemes.id),
+  score: real('score').notNull(),
+  reason: text('reason'),
+  createdAt: timestamp('created_at').defaultNow(),
 });
 
 // Chat conversations
@@ -131,24 +132,9 @@ export const insertUserSchema = createInsertSchema(users).pick({
   preferredLanguage: true,
 });
 
-export const insertCitizenProfileSchema = createInsertSchema(citizenProfiles).pick({
-  userId: true,
-  fullName: true,
-  aadhaarNumber: true,
-  dateOfBirth: true,
-  gender: true,
-  state: true,
-  district: true,
-  pincode: true,
-  annualIncome: true,
-  category: true,
-  occupation: true,
-  education: true,
-  familySize: true,
-  hasDisability: true,
-  disabilityType: true,
-  bankAccount: true,
-  additionalDetails: true,
+export const insertCitizenProfileSchema = z.object({
+  // ... existing fields
+  languagePreference: z.string().default('en'),
 });
 
 export const insertSchemeSchema = createInsertSchema(schemes).pick({
@@ -184,8 +170,7 @@ export const insertRecommendationSchema = createInsertSchema(recommendations).pi
   userId: true,
   schemeId: true,
   score: true,
-  reasoning: true,
-  eligibilityStatus: true,
+  reason: true,
 });
 
 export const insertChatConversationSchema = createInsertSchema(chatConversations).pick({
