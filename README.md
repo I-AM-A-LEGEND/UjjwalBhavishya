@@ -5,7 +5,6 @@ Judge is a modern, AI-powered web application designed to help citizens discover
 ## Key Features
 
 - **Personalized Dashboard:** A central hub for users to manage their profile, track applications, and view recommended schemes.
-- **AI-Powered Recommendations:** Leverages a sophisticated recommendation engine to suggest relevant government schemes based on a user's unique profile and eligibility criteria.
 - **Intelligent Scheme Discovery:** A powerful search and filtering system to easily find schemes by category, state, income level, and more.
 - **Instant Eligibility Checks:** Allows users to quickly determine their eligibility for any scheme with a single click.
 - **Streamlined Online Applications:** A user-friendly application process with status tracking and real-time notifications.
