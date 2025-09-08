@@ -142,6 +142,19 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
     return `₹${amount.toLocaleString()}`;
   };
 
+  const getDefaultStatusUrl = (category: string, applicationUrl: string | null): string => {
+    const statusUrlMap: Record<string, string> = {
+      "Agriculture": "https://pmkisan.gov.in/BeneficiaryStatus.aspx",
+      "Healthcare": "https://pmjay.gov.in/search/hospital",
+      "Housing": "https://pmaymis.gov.in/Track_Application_Status.aspx",
+      "Banking": "https://www.pmjdy.gov.in/account",
+      "Employment": "https://www.epfindia.gov.in/site_en/index.php",
+      "Insurance": "https://www.jansuraksha.gov.in/",
+      "Women & Child": "https://wcd.nic.in/"
+    };
+    return statusUrlMap[category] || applicationUrl || "https://www.myscheme.gov.in/search";
+  };
+
   return (
     <Card className="border border-border overflow-hidden hover:shadow-lg transition-shadow">
       {/* Header with gradient */}
