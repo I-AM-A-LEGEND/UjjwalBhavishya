@@ -59,7 +59,14 @@ const resources = {
         chooseAUsername: "Choose a username",
         chooseAPassword: "Choose a password",
         enterYourEmail: "Enter your email",
-        invalidEmailAddress: "Invalid email address"
+        invalidEmailAddress: "Invalid email address",
+        sarkarBot: "SarkarBot",
+        online: "Online",
+        offline: "Offline",
+        typeYourQuestion: "Type your question..."
+      },
+      chatbot: {
+        welcomeMessage: "Hello! I'm SarkarBot, your AI assistant for government schemes and services. How can I help you today?"
       }
     },
   },
@@ -119,7 +126,14 @@ const resources = {
         chooseAUsername: "एक उपयोगकर्ता नाम चुनें",
         chooseAPassword: "एक पासवर्ड चुनें",
         enterYourEmail: "अपना ईमेल दर्ज करें",
-        invalidEmailAddress: "अमान्य ईमेल पता"
+        invalidEmailAddress: "अमान्य ईमेल पता",
+        sarkarBot: "सरकारबॉट",
+        online: "ऑनलाइन",
+        offline: "ऑफ़लाइन",
+        typeYourQuestion: "अपना प्रश्न टाइप करें..."
+      },
+      chatbot: {
+        welcomeMessage: "नमस्ते! मैं सरकारबॉट हूं, सरकारी योजनाओं और सेवाओं के लिए आपका AI सहायक। आज मैं आपकी कैसे मदद कर सकता हूं?"
       }
     },
   },
