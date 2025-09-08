@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, CheckCircle, AlertCircle, Users } from "lucide-react";
+import { ExternalLink, CheckCircle, AlertCircle, Users, FileText } from "lucide-react";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
@@ -18,6 +18,7 @@ interface Scheme {
   benefits: string;
   maxIncome: number | null;
   applicationUrl: string | null;
+  statusUrl?: string | null;
   targetCategories: string[] | null;
 }
 
@@ -245,7 +246,7 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
         )}
 
         {/* Action Buttons */}
-        <div className="flex gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {showEligibilityButton && (
             <Button
               variant="outline"
@@ -263,11 +264,29 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
             size="sm"
             onClick={handleApply}
             disabled={applyMutation.isPending}
-            className="flex-1 flex items-center justify-center"
+            className={`${showEligibilityButton ? 'sm:col-span-1' : 'sm:col-span-2'} flex items-center justify-center`}
             data-testid={`button-apply-${scheme.id}`}
           >
             {applyMutation.isPending ? "Applying..." : "Apply Now"}
             {scheme.applicationUrl && <ExternalLink className="h-3 w-3 ml-1" />}
+          </Button>
+          
+          {/* Application Status Button */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const statusUrl = scheme.statusUrl || getDefaultStatusUrl(scheme.category, scheme.applicationUrl);
+              if (statusUrl) {
+                window.open(statusUrl, '_blank');
+              }
+            }}
+            className={`${showEligibilityButton ? 'sm:col-span-1' : 'sm:col-span-2'} flex items-center justify-center`}
+            data-testid={`button-status-${scheme.id}`}
+          >
+            <FileText className="h-3 w-3 mr-1" />
+            Check Status
+            <ExternalLink className="h-3 w-3 ml-1" />
           </Button>
         </div>
       </CardContent>
