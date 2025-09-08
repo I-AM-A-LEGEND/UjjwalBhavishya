@@ -42,7 +42,6 @@ export function Header() {
   const navigationItems = [
     { label: t("common.home"), path: "/" },
     { label: t("common.findSchemes"), path: "/schemes" },
-    { label: t("common.myApplications"), path: "/applications" },
     { label: t("common.help"), path: "/help" }
   ];
 

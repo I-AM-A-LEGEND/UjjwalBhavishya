@@ -8,7 +8,6 @@ const resources = {
       common: {
         home: "Home",
         findSchemes: "Find Schemes",
-        myApplications: "My Applications",
         help: "Help",
         loginRegister: "Login / Register",
         myProfile: "My Profile",
@@ -75,7 +74,6 @@ const resources = {
       common: {
         home: "होम",
         findSchemes: "योजनाएं खोजें",
-        myApplications: "मेरी आवेदन",
         help: "सहायता",
         loginRegister: "लॉगिन / रजिस्टर",
         myProfile: "मेरा प्रोफाइल",

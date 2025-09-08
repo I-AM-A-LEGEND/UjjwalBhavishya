@@ -9,7 +9,6 @@ import { Chatbot } from "@/components/chatbot/chatbot";
 import Home from "@/pages/home";
 import Profile from "@/pages/profile";
 import Schemes from "@/pages/schemes";
-import Applications from "@/pages/applications";
 import Help from "@/pages/help";
 import NotFound from "@/pages/not-found";
 import "./lib/i18n";
@@ -20,7 +19,6 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/profile" component={Profile} />
       <Route path="/schemes" component={Schemes} />
-      <Route path="/applications" component={Applications} />
       <Route path="/help" component={Help} />
       <Route component={NotFound} />
     </Switch>
