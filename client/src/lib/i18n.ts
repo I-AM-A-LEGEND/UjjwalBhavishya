@@ -83,6 +83,34 @@ const resources = {
         loginRequired: "Login Required",
         pleaseLoginToCheckEligibility: "Please login to check eligibility.",
         pleaseLoginToApply: "Please login to apply for schemes.",
+        loginOrRegisterToManageProfile: "Login or Register to manage your profile and access personalized services",
+        district: "District",
+        enterYourDistrict: "Enter your district",
+        pincode: "PIN Code",
+        enterPinCode: "Enter PIN code",
+        familySize: "Family Size",
+        numberOfFamilyMembers: "Number of family members",
+        bankAccountNumber: "Bank Account Number",
+        bankAccountForDBT: "Bank account for DBT",
+        iHaveADisability: "I have a disability",
+        additionalDetails: "Additional Details",
+        additionalInfoForSchemeRecommendations: "Any additional information that might help with scheme recommendations...",
+        saveProfile: "Save Profile",
+        aadhaarNumber: "Aadhaar Number",
+        dateOfBirth: "Date of Birth",
+        gender: "Gender",
+        selectGender: "Select gender",
+        updateYourPersonalInformation: "Update your personal information to get better scheme recommendations",
+        languagePreference: "Language Preference",
+        simple4StepProcess: "Simple 4-step process to get started",
+        profileCreation: "Profile Creation",
+        provideSocioEconomicDetails: "Provide your socio-economic details",
+        aiAnalysis: "AI Analysis",
+        aiEngineMatches: "Our AI engine matches you with relevant schemes",
+        applyOnline: "Apply Online",
+        submitApplications: "Submit applications directly through the portal",
+        trackReceive: "Track & Receive",
+        monitorApplicationStatus: "Monitor your application status and receive benefits",
         // Home page translations
         findGovernmentSchemes: "Find Government Schemes",
         madeForYou: "Made for You",
@@ -185,6 +213,34 @@ const resources = {
         loginRequired: "लॉगिन आवश्यक",
         pleaseLoginToCheckEligibility: "पात्रता जांचने के लिए कृपया लॉगिन करें।",
         pleaseLoginToApply: "योजनाओं के लिए आवेदन करने हेतु कृपया लॉगिन करें।",
+        loginOrRegisterToManageProfile: "अपनी प्रोफ़ाइल प्रबंधित करने और व्यक्तिगत सेवाओं तक पहुंचने के लिए लॉगिन या रजिस्टर करें",
+        district: "जिला",
+        enterYourDistrict: "अपना जिला दर्ज करें",
+        pincode: "पिन कोड",
+        enterPinCode: "पिन कोड दर्ज करें",
+        familySize: "परिवार का आकार",
+        numberOfFamilyMembers: "परिवार के सदस्यों की संख्या",
+        bankAccountNumber: "बैंक खाता संख्या",
+        bankAccountForDBT: "डीबीटी के लिए बैंक खाता",
+        iHaveADisability: "मेरे पास विकलांगता है",
+        additionalDetails: "अतिरिक्त विवरण",
+        additionalInfoForSchemeRecommendations: "योजना सिफारिशों में मदद करने के लिए कोई अतिरिक्त जानकारी...",
+        saveProfile: "प्रोफ़ाइल सहेजें",
+        aadhaarNumber: "आधार संख्या",
+        dateOfBirth: "जन्म तिथि",
+        gender: "लिंग",
+        selectGender: "लिंग चुनें",
+        updateYourPersonalInformation: "बेहतर योजना सिफारिशें प्राप्त करने के लिए अपनी व्यक्तिगत जानकारी अपडेट करें",
+        languagePreference: "भाषा वरीयता",
+        simple4StepProcess: "शुरू करने के लिए सरल 4-चरण प्रक्रिया",
+        profileCreation: "प्रोफ़ाइल निर्माण",
+        provideSocioEconomicDetails: "अपनी सामाजिक-आर्थिक जानकारी प्रदान करें",
+        aiAnalysis: "AI विश्लेषण",
+        aiEngineMatches: "हमारा AI इंजन आपको प्रासंगिक योजनाओं से मिलान करता है",
+        applyOnline: "ऑनलाइन आवेदन करें",
+        submitApplications: "पोर्टल के माध्यम से सीधे आवेदन जमा करें",
+        trackReceive: "ट्रैक करें और प्राप्त करें",
+        monitorApplicationStatus: "अपनी आवेदन स्थिति की निगरानी करें और लाभ प्राप्त करें",
         // Home page translations
         findGovernmentSchemes: "सरकारी योजनाएं खोजें",
         madeForYou: "आपके लिए बनी",
@@ -454,24 +510,26 @@ const resources = {
   }
 };
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources,
-    detection: {
-      order: ["localStorage", "navigator", "htmlTag"],
-      caches: ["localStorage"],
-    },
-    lng: "en",
-    fallbackLng: "en",
-    interpolation: {
-      escapeValue: false,
-    },
-    debug: process.env.NODE_ENV === "development",
-    react: {
-      useSuspense: false,
-    },
-  });
+if (!i18n.isInitialized) {
+  i18n
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+      resources,
+      detection: {
+        order: ["localStorage", "navigator", "htmlTag"],
+        caches: ["localStorage"],
+      },
+      lng: "en",
+      fallbackLng: "en",
+      interpolation: {
+        escapeValue: false,
+      },
+      debug: process.env.NODE_ENV === "development",
+      react: {
+        useSuspense: false,
+      },
+    });
+}
 
 export default i18n;

@@ -35,7 +35,12 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
     setConnectionStatus('connecting');
 
     try {
-      const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:5000';
+      // Use the same port as the server for WebSocket connection with /ws path
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const host = window.location.hostname;
+      // Handle port properly - use 3000 for server, but don't append port if it's the default
+      const port = window.location.port && window.location.port !== '' ? `:${window.location.port}` : '';
+      const wsUrl = import.meta.env.VITE_WS_URL || `${protocol}//${host}${port}/ws`;
 
       wsRef.current = new WebSocket(wsUrl);
 
