@@ -1,6 +1,6 @@
 # Ujjwal Bhavishya Portal: Your Intelligent Guide to Government Schemes
 
-Judge is a modern, AI-powered web application designed to help citizens discover, understand, and apply for government schemes in a seamless and personalized manner. It acts as a comprehensive digital assistant, simplifying access to public services and benefits.
+This is a modern, AI-powered web application designed to help citizens discover, understand, and apply for government schemes in a seamless and personalized manner. It acts as a comprehensive digital assistant, simplifying access to public services and benefits.
 
 ## Key Features
 
