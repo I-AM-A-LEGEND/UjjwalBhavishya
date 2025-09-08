@@ -1,40 +1,47 @@
 import { ProfileForm } from "@/components/profile/profile-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { User } from "lucide-react";
-import { LanguageSelector } from "@/components/chatbot/language-selector";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "../context/AuthContext";
+import { LoginForm } from "@/components/auth/login-form";
+import { RegisterForm } from "@/components/auth/register-form";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useTranslation } from 'react-i18next';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function Profile() {
-  const [language, setLanguage] = useState("en"); // TODO: Load initial language from user profile
+  const { user } = useAuth();
   const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState("login");
+  const { t, i18n } = useTranslation();
 
   const updateLanguageMutation = useMutation({
     mutationFn: async (newLanguage: string) => {
-      // TODO: Replace 'user1' with actual authenticated user ID
-      const response = await apiRequest("PUT", `/api/profile/user1/language`, { language: newLanguage });
+      if (!user?.id) throw new Error("User not authenticated.");
+      const response = await apiRequest("PUT", `/api/profile/${user.id}/language`, { language: newLanguage });
       return response.json();
     },
     onSuccess: () => {
       toast({
-        title: "Language Preference Updated",
-        description: `Your preferred language has been set to ${language}.`,
+        title: t("common.languagePreferenceUpdated"),
+        description: t("common.yourPreferredLanguageHasBeenSet"),
       });
     },
     onError: (error) => {
       toast({
-        title: "Failed to Update Language",
-        description: `Error: ${error.message}`,
+        title: t("common.failedToUpdateLanguage"),
+        description: `${t("common.error")}: ${error.message}`,
         variant: "destructive",
       });
     },
   });
 
   const handleSaveLanguage = () => {
-    updateLanguageMutation.mutate(language);
+    updateLanguageMutation.mutate(i18n.language);
   };
 
   return (
@@ -43,33 +50,81 @@ export default function Profile() {
         <div className="flex items-center mb-8">
           <User className="h-8 w-8 text-primary mr-3" />
           <div>
-            <h1 className="text-3xl font-bold text-foreground">My Profile</h1>
+            <h1 className="text-3xl font-bold text-foreground">{t("common.myProfile")}</h1>
             <p className="text-muted-foreground">
-              Update your personal information to get better scheme recommendations
+              {user ? t("common.updateYourPersonalInformation") : t("common.loginOrRegisterToManageProfile")}
             </p>
           </div>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ProfileForm />
-          </CardContent>
-        </Card>
+        {!user ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>{activeTab === "login" ? t("common.login") : t("common.register")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="login">{t("common.login")}</TabsTrigger>
+                  <TabsTrigger value="register">{t("common.register")}</TabsTrigger>
+                </TabsList>
+                <TabsContent value="login">
+                  <LoginForm />
+                </TabsContent>
+                <TabsContent value="register">
+                  <RegisterForm />
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+        ) : (
+          <>
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("common.personalInformation")}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ProfileForm userId={user.id} />
+              </CardContent>
+            </Card>
 
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle>Language Preference</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center space-x-4">
-              <LanguageSelector onSelect={setLanguage} currentLanguage={language} />
-              <Button onClick={handleSaveLanguage}>Save</Button>
-            </div>
-          </CardContent>
-        </Card>
+            <Card className="mt-8">
+              <CardHeader>
+                <CardTitle>{t("common.languagePreference")}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center space-x-4">
+                  <Select value={i18n.language} onValueChange={(value) => i18n.changeLanguage(value)}>
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[
+                        { code: "en", name: "English" },
+                        { code: "hi", name: "हिंदी" },
+                        { code: "bn", name: "বাংলা" },
+                        { code: "ta", name: "தமிழ்" },
+                        { code: "te", name: "తెలుగు" },
+                        { code: "mr", name: "मराठी" },
+                        { code: "gu", name: "ગુજરાતી" },
+                        { code: "kn", name: "ಕನ್ನಡ" },
+                        { code: "ml", name: "മലയാളം" },
+                        { code: "pa", name: "ਪੰਜਾਬੀ" },
+                        { code: "or", name: "ଓଡ଼ିଆ" },
+                        { code: "as", name: "অসমীয়া" }
+                      ].map((lang) => (
+                        <SelectItem key={lang.code} value={lang.code}>
+                          {lang.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button onClick={handleSaveLanguage}>{t("common.save")}</Button>
+                </div>
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
     </div>
   );

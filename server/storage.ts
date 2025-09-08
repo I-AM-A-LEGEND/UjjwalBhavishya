@@ -136,7 +136,21 @@ export class MemStorage implements IStorage {
 
     sampleSchemes.forEach(scheme => {
       const id = randomUUID();
-      this.schemes.set(id, { ...scheme, id, createdAt: new Date(), updatedAt: new Date() });
+      this.schemes.set(id, {
+        ...scheme,
+        id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        state: scheme.state || null,
+        documents: scheme.documents || null,
+        applicationUrl: scheme.applicationUrl || null,
+        isActive: scheme.isActive || true,
+        maxIncome: scheme.maxIncome || null,
+        minAge: scheme.minAge || null,
+        maxAge: scheme.maxAge || null,
+        targetCategories: scheme.targetCategories || null,
+        targetOccupations: scheme.targetOccupations || null
+      });
     });
   }
 
@@ -155,10 +169,12 @@ export class MemStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = randomUUID();
-    const user: User = { 
-      ...insertUser, 
-      id, 
-      createdAt: new Date() 
+    const user: User = {
+      ...insertUser,
+      id,
+      createdAt: new Date(),
+      phone: insertUser.phone || null,
+      preferredLanguage: insertUser.preferredLanguage || "en"
     };
     this.users.set(id, user);
     return user;
@@ -171,10 +187,25 @@ export class MemStorage implements IStorage {
 
   async createCitizenProfile(insertProfile: InsertCitizenProfile): Promise<CitizenProfile> {
     const id = randomUUID();
-    const profile: CitizenProfile = { 
-      ...insertProfile, 
-      id, 
-      updatedAt: new Date() 
+    const profile: CitizenProfile = {
+      ...insertProfile,
+      id,
+      updatedAt: new Date(),
+      aadhaarNumber: insertProfile.aadhaarNumber || null,
+      dateOfBirth: insertProfile.dateOfBirth || null,
+      gender: insertProfile.gender || null,
+      district: insertProfile.district || null,
+      pincode: insertProfile.pincode || null,
+      annualIncome: insertProfile.annualIncome || null,
+      category: insertProfile.category || null,
+      occupation: insertProfile.occupation || null,
+      education: insertProfile.education || null,
+      familySize: insertProfile.familySize || null,
+      hasDisability: insertProfile.hasDisability || false,
+      disabilityType: insertProfile.disabilityType || null,
+      bankAccount: insertProfile.bankAccount || null,
+      languagePreference: insertProfile.languagePreference || "en",
+      additionalDetails: insertProfile.additionalDetails || null
     };
     this.citizenProfiles.set(id, profile);
     return profile;
@@ -216,11 +247,20 @@ export class MemStorage implements IStorage {
 
   async createScheme(insertScheme: InsertScheme): Promise<Scheme> {
     const id = randomUUID();
-    const scheme: Scheme = { 
-      ...insertScheme, 
-      id, 
-      createdAt: new Date(), 
-      updatedAt: new Date() 
+    const scheme: Scheme = {
+      ...insertScheme,
+      id,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      state: insertScheme.state || null,
+      documents: insertScheme.documents || null,
+      applicationUrl: insertScheme.applicationUrl || null,
+      isActive: insertScheme.isActive || true,
+      maxIncome: insertScheme.maxIncome || null,
+      minAge: insertScheme.minAge || null,
+      maxAge: insertScheme.maxAge || null,
+      targetCategories: insertScheme.targetCategories || null,
+      targetOccupations: insertScheme.targetOccupations || null
     };
     this.schemes.set(id, scheme);
     return scheme;
@@ -248,12 +288,17 @@ export class MemStorage implements IStorage {
 
   async createApplication(insertApplication: InsertApplication): Promise<Application> {
     const id = randomUUID();
-    const application: Application = { 
-      ...insertApplication, 
-      id, 
-      appliedAt: new Date(), 
+    const application: Application = {
+      ...insertApplication,
+      id,
+      appliedAt: new Date(),
       lastUpdated: new Date(),
-      statusHistory: [{ status: insertApplication.status || "submitted", timestamp: new Date() }]
+      status: insertApplication.status || "submitted",
+      statusHistory: [{ status: insertApplication.status || "submitted", timestamp: new Date() }],
+      documents: insertApplication.documents || null,
+      applicationId: insertApplication.applicationId || null,
+      amount: insertApplication.amount || null,
+      remarks: insertApplication.remarks || null
     };
     this.applications.set(id, application);
     return application;
@@ -284,10 +329,11 @@ export class MemStorage implements IStorage {
 
   async createRecommendation(insertRecommendation: InsertRecommendation): Promise<Recommendation> {
     const id = randomUUID();
-    const recommendation: Recommendation = { 
-      ...insertRecommendation, 
-      id, 
-      createdAt: new Date() 
+    const recommendation: Recommendation = {
+      ...insertRecommendation,
+      id,
+      createdAt: new Date(),
+      reason: insertRecommendation.reason || null
     };
     this.recommendations.set(id, recommendation);
     return recommendation;
@@ -305,11 +351,13 @@ export class MemStorage implements IStorage {
 
   async createChatConversation(insertConversation: InsertChatConversation): Promise<ChatConversation> {
     const id = randomUUID();
-    const conversation: ChatConversation = { 
-      ...insertConversation, 
-      id, 
-      startedAt: new Date(), 
-      lastActiveAt: new Date() 
+    const conversation: ChatConversation = {
+      ...insertConversation,
+      id,
+      startedAt: new Date(),
+      lastActiveAt: new Date(),
+      language: insertConversation.language || "en",
+      userId: insertConversation.userId || null
     };
     this.chatConversations.set(id, conversation);
     return conversation;
@@ -323,20 +371,21 @@ export class MemStorage implements IStorage {
 
   async createChatMessage(insertMessage: InsertChatMessage): Promise<ChatMessage> {
     const id = randomUUID();
-    const message: ChatMessage = { 
-      ...insertMessage, 
-      id, 
-      timestamp: new Date() 
+    const message: ChatMessage = {
+      ...insertMessage,
+      id,
+      timestamp: new Date(),
+      contentType: insertMessage.contentType || "text"
     };
     this.chatMessages.set(id, message);
-    
+
     // Update conversation last active time
     const conversation = this.chatConversations.get(insertMessage.conversationId);
     if (conversation) {
       conversation.lastActiveAt = new Date();
       this.chatConversations.set(conversation.id, conversation);
     }
-    
+
     return message;
   }
 
@@ -347,10 +396,16 @@ export class MemStorage implements IStorage {
 
   async createGrievance(insertGrievance: InsertGrievance): Promise<Grievance> {
     const id = randomUUID();
-    const grievance: Grievance = { 
-      ...insertGrievance, 
-      id, 
-      createdAt: new Date() 
+    const grievance: Grievance = {
+      ...insertGrievance,
+      id,
+      createdAt: new Date(),
+      resolvedAt: null,
+      status: insertGrievance.status || "open",
+      priority: insertGrievance.priority || "medium",
+      assignedTo: insertGrievance.assignedTo || null,
+      resolution: insertGrievance.resolution || null,
+      applicationId: insertGrievance.applicationId || null
     };
     this.grievances.set(id, grievance);
     return grievance;

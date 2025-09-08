@@ -132,9 +132,25 @@ export const insertUserSchema = createInsertSchema(users).pick({
   preferredLanguage: true,
 });
 
-export const insertCitizenProfileSchema = z.object({
-  // ... existing fields
-  languagePreference: z.string().default('en'),
+export const insertCitizenProfileSchema = createInsertSchema(citizenProfiles).pick({
+  userId: true,
+  fullName: true,
+  aadhaarNumber: true,
+  dateOfBirth: true,
+  gender: true,
+  state: true,
+  district: true,
+  pincode: true,
+  annualIncome: true,
+  category: true,
+  occupation: true,
+  education: true,
+  familySize: true,
+  hasDisability: true,
+  disabilityType: true,
+  bankAccount: true,
+  languagePreference: true,
+  additionalDetails: true,
 });
 
 export const insertSchemeSchema = createInsertSchema(schemes).pick({

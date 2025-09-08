@@ -3,12 +3,14 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { LanguageSelector } from "./language-selector";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MessageCircle, X, Send, Mic, MicOff, Volume2 } from "lucide-react";
 import { useWebSocket } from "@/hooks/use-websocket";
 import { useSpeech } from "@/hooks/use-speech";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { useAuth } from "@/context/AuthContext";
+import { useTranslation } from 'react-i18next';
 
 interface ChatMessage {
   id: string;
@@ -24,15 +26,16 @@ interface ChatConversation {
 }
 
 export function Chatbot() {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [conversation, setConversation] = useState<ChatConversation | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [language, setLanguage] = useState("en");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const { isListening, startListening, stopListening, transcript } = useSpeech();
   const { isConnected } = useWebSocket();
+  const { t, i18n } = useTranslation();
 
   // Create conversation when chatbot opens
   const createConversationMutation = useMutation({
@@ -42,13 +45,13 @@ export function Chatbot() {
     },
     onSuccess: (data) => {
       setConversation(data);
-      // Add welcome message
+      // Add welcome message based on current language
+      const welcomeMessageContent = t("chatbot.welcomeMessage");
+
       const welcomeMessage: ChatMessage = {
         id: `welcome-${Date.now()}`,
         role: "assistant",
-        content: language === "hi" 
-          ? "नमस्ते! मैं सरकारबॉट हूं। मैं आपको सरकारी योजनाओं के बारे में जानकारी देने में मदद कर सकता हूं। आज मैं आपकी कैसे सहायता कर सकता हूं?"
-          : "Hello! I'm SarkarBot. I can help you find government schemes in English, Hindi, or your regional language. How can I assist you today?",
+        content: welcomeMessageContent,
         timestamp: new Date()
       };
       setMessages([welcomeMessage]);
@@ -82,7 +85,7 @@ export function Chatbot() {
       // Speak AI response if speech is enabled
       if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(data.aiMessage.content);
-        utterance.lang = language === "hi" ? "hi-IN" : "en-US";
+        utterance.lang = i18n.language === "hi" ? "hi-IN" : "en-US"; // Adjust language code as needed
         speechSynthesis.speak(utterance);
       }
     }
@@ -95,8 +98,8 @@ export function Chatbot() {
       const sessionId = `session-${Date.now()}`;
       createConversationMutation.mutate({
         sessionId,
-        language,
-        userId: undefined // TODO: Add actual user ID when authenticated
+        language: i18n.language,
+        userId: user?.id // Use actual user ID when authenticated
       });
     }
   };
@@ -156,16 +159,40 @@ export function Chatbot() {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <MessageCircle className="h-5 w-5 mr-2" />
-                <span className="font-medium">SarkarBot</span>
+                <span className="font-medium">{t("common.sarkarBot")}</span>
                 <Badge 
                   variant="secondary" 
                   className="ml-2 bg-primary-foreground/20 text-primary-foreground"
                 >
-                  {isConnected ? "Online" : "Offline"}
+                  {isConnected ? t("common.online") : t("common.offline")}
                 </Badge>
               </div>
               <div className="flex items-center space-x-2">
-                <LanguageSelector onSelect={setLanguage} currentLanguage={language} />
+                <Select value={i18n.language} onValueChange={(value) => i18n.changeLanguage(value)}>
+                  <SelectTrigger className="w-24 h-6 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[
+                      { code: "en", name: "English" },
+                      { code: "hi", name: "हिंदी" },
+                      { code: "bn", name: "বাংলা" },
+                      { code: "ta", name: "தமிழ்" },
+                      { code: "te", name: "తెలుగు" },
+                      { code: "mr", name: "मराठी" },
+                      { code: "gu", name: "ગુજરાતી" },
+                      { code: "kn", name: "ಕನ್ನಡ" },
+                      { code: "ml", name: "മലയാളം" },
+                      { code: "pa", name: "ਪੰਜਾਬੀ" },
+                      { code: "or", name: "ଓଡ଼ିଆ" },
+                      { code: "as", name: "অসমীয়া" }
+                    ].map((lang) => (
+                      <SelectItem key={lang.code} value={lang.code}>
+                        {lang.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -223,7 +250,7 @@ export function Chatbot() {
           <div className="border-t border-border p-3">
             <div className="flex space-x-2">
               <Input
-                placeholder={language === "hi" ? "अपना प्रश्न टाइप करें..." : "Type your question..."}
+                placeholder={t("common.typeYourQuestion")}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
@@ -254,7 +281,7 @@ export function Chatbot() {
             {isListening && (
               <p className="text-xs text-muted-foreground mt-2 flex items-center">
                 <Volume2 className="h-3 w-3 mr-1" />
-                {language === "hi" ? "सुन रहा हूं..." : "Listening..."}
+                {t("common.listening")}
               </p>
             )}
           </div>

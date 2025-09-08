@@ -69,7 +69,8 @@ describe('Recommendation Service', () => {
     expect(storage.getAllSchemes).toHaveBeenCalled();
     expect(storage.deleteRecommendationsByUserId).toHaveBeenCalledWith('1');
     expect(storage.createRecommendation).toHaveBeenCalled();
-    expect(recommendations).toHaveLength(1);
+    expect(recommendations).toHaveLength(2);
     expect(recommendations[0].scheme.id).toBe('1');
+    expect(recommendations[1].scheme.id).toBe('2');
   });
 });

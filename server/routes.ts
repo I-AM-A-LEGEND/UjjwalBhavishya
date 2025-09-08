@@ -5,6 +5,7 @@ import { storage } from "./storage";
 import { generateChatResponse, translateText } from "./services/gemini";
 import { schemeService } from "./services/schemes";
 import { recommendationService } from "./services/recommendations";
+import bcrypt from "bcrypt";
 import { 
   insertUserSchema, insertCitizenProfileSchema, insertApplicationSchema,
   insertChatConversationSchema, insertChatMessageSchema, insertGrievanceSchema
@@ -64,7 +65,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Email already exists" });
       }
 
-      const user = await storage.createUser(userData);
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      const user = await storage.createUser({ ...userData, password: hashedPassword });
       res.json({ user: { id: user.id, username: user.username, email: user.email } });
     } catch (error) {
       res.status(400).json({ message: "Invalid user data", error: error instanceof Error ? error.message : "Unknown error" });
@@ -76,7 +78,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { username, password } = req.body;
       const user = await storage.getUserByUsername(username);
       
-      if (!user || user.password !== password) {
+      if (!user) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
 
@@ -356,7 +363,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const aiMessage = await storage.createChatMessage({
         conversationId: messageData.conversationId,
         role: "assistant",
-        content: aiResponse.content,
+        content: aiResponse,
         contentType: "text"
       });
 

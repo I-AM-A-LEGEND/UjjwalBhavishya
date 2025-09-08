@@ -15,7 +15,7 @@ export default function Applications() {
 
   const { data: applications = [], isLoading } = useQuery({
     queryKey: ["/api/applications", userId],
-  });
+  }) as { data: any[], isLoading: boolean };
 
   const filteredApplications = applications.filter((app: any) =>
     app.scheme?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

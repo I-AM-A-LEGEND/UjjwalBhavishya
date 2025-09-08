@@ -25,27 +25,31 @@ export default function Schemes() {
 
   const { data: schemes = [], isLoading: schemesLoading } = useQuery({
     queryKey: ["/api/schemes", filters],
-    queryFn: ({ queryKey }) => {
+    queryFn: async ({ queryKey }) => {
       const [, params] = queryKey as [string, SchemeFilters];
       const searchParams = new URLSearchParams();
-      
+
       if (params.search) searchParams.append("search", params.search);
-      if (params.category) searchParams.append("category", params.category);
-      if (params.state) searchParams.append("state", params.state);
-      if (params.maxIncome) searchParams.append("maxIncome", params.maxIncome);
-      
-      return fetch(`/api/schemes?${searchParams.toString()}`).then(res => res.json());
+      if (params.category && params.category !== "all") searchParams.append("category", params.category);
+      if (params.state && params.state !== "all") searchParams.append("state", params.state);
+      if (params.maxIncome && params.maxIncome !== "all") searchParams.append("maxIncome", params.maxIncome);
+
+      const response = await fetch(`/api/schemes?${searchParams.toString()}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch schemes');
+      }
+      return response.json();
     },
   });
 
   const { data: categories = [] } = useQuery({
     queryKey: ["/api/schemes/categories"],
-  });
+  }) as { data: string[] };
 
   const { data: recommendations = [] } = useQuery({
     queryKey: ["/api/recommendations/user1"], // TODO: Use actual user ID
     enabled: false // Enable when user is authenticated
-  });
+  }) as { data: any[] };
 
   const handleFilterChange = (key: keyof SchemeFilters, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));

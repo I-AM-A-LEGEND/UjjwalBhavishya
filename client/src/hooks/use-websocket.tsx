@@ -35,8 +35,8 @@ export function useWebSocket(options: UseWebSocketOptions = {}) {
     setConnectionStatus('connecting');
 
     try {
-      const wsUrl = `${import.meta.env.VITE_WS_URL}`;
-      
+      const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:5000/ws';
+
       wsRef.current = new WebSocket(wsUrl);
 
       wsRef.current.onopen = () => {

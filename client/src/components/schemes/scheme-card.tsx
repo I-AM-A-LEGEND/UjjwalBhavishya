@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
 
 interface Scheme {
   id: string;
@@ -36,6 +37,8 @@ interface SchemeCardProps {
 export function SchemeCard({ scheme, recommendation, showEligibilityButton = false, userId }: SchemeCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
+  const currentUserId = userId || user?.id;
 
   const checkEligibilityMutation = useMutation({
     mutationFn: async (data: { userId: string; schemeId: string }) => {
@@ -87,22 +90,22 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
   });
 
   const handleCheckEligibility = () => {
-    if (!userId) {
+    if (!currentUserId) {
       toast({
         title: "Login Required",
-        description: "Please complete your profile to check eligibility.",
+        description: "Please login to check eligibility.",
         variant: "destructive"
       });
       return;
     }
-    checkEligibilityMutation.mutate({ userId, schemeId: scheme.id });
+    checkEligibilityMutation.mutate({ userId: currentUserId, schemeId: scheme.id });
   };
 
   const handleApply = () => {
-    if (!userId) {
+    if (!currentUserId) {
       toast({
-        title: "Login Required", 
-        description: "Please complete your profile to apply for schemes.",
+        title: "Login Required",
+        description: "Please login to apply for schemes.",
         variant: "destructive"
       });
       return;
@@ -111,7 +114,7 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
     if (scheme.applicationUrl) {
       window.open(scheme.applicationUrl, '_blank');
     } else {
-      applyMutation.mutate({ userId, schemeId: scheme.id });
+      applyMutation.mutate({ userId: currentUserId, schemeId: scheme.id });
     }
   };
 

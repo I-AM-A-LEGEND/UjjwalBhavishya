@@ -12,6 +12,7 @@ import Schemes from "@/pages/schemes";
 import Applications from "@/pages/applications";
 import Help from "@/pages/help";
 import NotFound from "@/pages/not-found";
+import "./lib/i18n";
 
 function Router() {
   return (
@@ -26,20 +27,24 @@ function Router() {
   );
 }
 
+import { AuthProvider } from "./context/AuthContext";
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <div className="min-h-screen bg-background">
-          <Header />
-          <main className="flex-1">
-            <Router />
-          </main>
-          <Footer />
-          <Chatbot />
-        </div>
-        <Toaster />
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <div className="min-h-screen bg-background">
+            <Header />
+            <main className="flex-1">
+              <Router />
+            </main>
+            <Footer />
+            <Chatbot />
+          </div>
+          <Toaster />
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

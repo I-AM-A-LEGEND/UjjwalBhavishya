@@ -15,9 +15,10 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Loader2, Save, User, MapPin, Briefcase, GraduationCap, Home, Heart } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 // Form validation schema
-const profileSchema = z.object({
+const createProfileSchema = (t: any) => z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
   aadhaarNumber: z.string().optional(),
   dateOfBirth: z.string().optional(),
@@ -36,12 +37,13 @@ const profileSchema = z.object({
   additionalDetails: z.string().optional(),
 });
 
-type ProfileFormData = z.infer<typeof profileSchema>;
-
-export function ProfileForm() {
-  const [userId] = useState("user1"); // TODO: Get from auth context
+export function ProfileForm({ userId }: { userId: string }) {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
+
+  const profileSchema = createProfileSchema(t);
+  type ProfileFormData = z.infer<typeof profileSchema>;
 
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
@@ -69,28 +71,28 @@ export function ProfileForm() {
   const { data: profile, isLoading } = useQuery({
     queryKey: ["/api/profile", userId],
     enabled: !!userId,
-  });
+  }) as { data: any, isLoading: boolean };
 
   // Update form when profile data loads
   useEffect(() => {
     if (profile) {
       form.reset({
-        fullName: profile.fullName || "",
-        aadhaarNumber: profile.aadhaarNumber || "",
-        dateOfBirth: profile.dateOfBirth || "",
-        gender: profile.gender || "",
-        state: profile.state || "",
-        district: profile.district || "",
-        pincode: profile.pincode || "",
-        annualIncome: profile.annualIncome || undefined,
-        category: profile.category || "",
-        occupation: profile.occupation || "",
-        education: profile.education || "",
-        familySize: profile.familySize || undefined,
-        hasDisability: profile.hasDisability || false,
-        disabilityType: profile.disabilityType || "",
-        bankAccount: profile.bankAccount || "",
-        additionalDetails: profile.additionalDetails || "",
+        fullName: (profile as any).fullName || "",
+        aadhaarNumber: (profile as any).aadhaarNumber || "",
+        dateOfBirth: (profile as any).dateOfBirth || "",
+        gender: (profile as any).gender || "",
+        state: (profile as any).state || "",
+        district: (profile as any).district || "",
+        pincode: (profile as any).pincode || "",
+        annualIncome: (profile as any).annualIncome || undefined,
+        category: (profile as any).category || "",
+        occupation: (profile as any).occupation || "",
+        education: (profile as any).education || "",
+        familySize: (profile as any).familySize || undefined,
+        hasDisability: (profile as any).hasDisability || false,
+        disabilityType: (profile as any).disabilityType || "",
+        bankAccount: (profile as any).bankAccount || "",
+        additionalDetails: (profile as any).additionalDetails || "",
       });
     }
   }, [profile, form]);
@@ -175,11 +177,11 @@ export function ProfileForm() {
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <Label htmlFor="fullName">Full Name *</Label>
+              <Label htmlFor="fullName">{t("common.fullName")} *</Label>
               <Input
                 id="fullName"
                 {...form.register("fullName")}
-                placeholder="Enter your full name"
+                placeholder={t("common.enterYourFullName")}
                 data-testid="input-full-name"
               />
               {form.formState.errors.fullName && (
@@ -188,7 +190,7 @@ export function ProfileForm() {
             </div>
 
             <div>
-              <Label htmlFor="aadhaarNumber">Aadhaar Number</Label>
+              <Label htmlFor="aadhaarNumber">{t("common.aadhaarNumber")}</Label>
               <Input
                 id="aadhaarNumber"
                 {...form.register("aadhaarNumber")}
@@ -199,7 +201,7 @@ export function ProfileForm() {
             </div>
 
             <div>
-              <Label htmlFor="dateOfBirth">Date of Birth</Label>
+              <Label htmlFor="dateOfBirth">{t("common.dateOfBirth")}</Label>
               <Input
                 id="dateOfBirth"
                 type="date"
@@ -209,10 +211,10 @@ export function ProfileForm() {
             </div>
 
             <div>
-              <Label htmlFor="gender">Gender</Label>
+              <Label htmlFor="gender">{t("common.gender")}</Label>
               <Select value={form.watch("gender")} onValueChange={(value) => form.setValue("gender", value)}>
                 <SelectTrigger data-testid="select-gender">
-                  <SelectValue placeholder="Select gender" />
+                  <SelectValue placeholder={t("common.selectGender")} />
                 </SelectTrigger>
                 <SelectContent>
                   {genders.map((gender) => (
@@ -232,16 +234,16 @@ export function ProfileForm() {
         <CardHeader>
           <CardTitle className="flex items-center">
             <MapPin className="h-5 w-5 mr-2" />
-            Address Information
+            {t("common.addressInformation")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <Label htmlFor="state">State/UT *</Label>
+              <Label htmlFor="state">{t("common.state")} *</Label>
               <Select value={form.watch("state")} onValueChange={(value) => form.setValue("state", value)}>
                 <SelectTrigger data-testid="select-state">
-                  <SelectValue placeholder="Select your state" />
+                  <SelectValue placeholder={t("common.selectYourState")} />
                 </SelectTrigger>
                 <SelectContent>
                   {states.map((state) => (
@@ -257,21 +259,21 @@ export function ProfileForm() {
             </div>
 
             <div>
-              <Label htmlFor="district">District</Label>
+              <Label htmlFor="district">{t("common.district")}</Label>
               <Input
                 id="district"
                 {...form.register("district")}
-                placeholder="Enter your district"
+                placeholder={t("common.enterYourDistrict")}
                 data-testid="input-district"
               />
             </div>
 
             <div>
-              <Label htmlFor="pincode">PIN Code</Label>
+              <Label htmlFor="pincode">{t("common.pincode")}</Label>
               <Input
                 id="pincode"
                 {...form.register("pincode")}
-                placeholder="Enter PIN code"
+                placeholder={t("common.enterPinCode")}
                 maxLength={6}
                 data-testid="input-pincode"
               />
@@ -285,28 +287,28 @@ export function ProfileForm() {
         <CardHeader>
           <CardTitle className="flex items-center">
             <Briefcase className="h-5 w-5 mr-2" />
-            Socio-Economic Information
+            {t("common.socioEconomicInformation")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <Label htmlFor="annualIncome">Annual Income (₹)</Label>
+              <Label htmlFor="annualIncome">{t("common.annualIncome")} (₹)</Label>
               <Input
                 id="annualIncome"
                 type="number"
                 {...form.register("annualIncome", { valueAsNumber: true })}
-                placeholder="Enter annual income"
+                placeholder={t("common.enterAnnualIncome")}
                 min="0"
                 data-testid="input-annual-income"
               />
             </div>
 
             <div>
-              <Label htmlFor="category">Category</Label>
+              <Label htmlFor="category">{t("common.category")}</Label>
               <Select value={form.watch("category")} onValueChange={(value) => form.setValue("category", value)}>
                 <SelectTrigger data-testid="select-category">
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue placeholder={t("common.selectCategory")} />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category) => (
@@ -319,10 +321,10 @@ export function ProfileForm() {
             </div>
 
             <div>
-              <Label htmlFor="occupation">Occupation</Label>
+              <Label htmlFor="occupation">{t("common.occupation")}</Label>
               <Select value={form.watch("occupation")} onValueChange={(value) => form.setValue("occupation", value)}>
                 <SelectTrigger data-testid="select-occupation">
-                  <SelectValue placeholder="Select occupation" />
+                  <SelectValue placeholder={t("common.selectOccupation")} />
                 </SelectTrigger>
                 <SelectContent>
                   {occupations.map((occupation) => (
@@ -335,10 +337,10 @@ export function ProfileForm() {
             </div>
 
             <div>
-              <Label htmlFor="education">Education Level</Label>
+              <Label htmlFor="education">{t("common.educationLevel")}</Label>
               <Select value={form.watch("education")} onValueChange={(value) => form.setValue("education", value)}>
                 <SelectTrigger data-testid="select-education">
-                  <SelectValue placeholder="Select education level" />
+                  <SelectValue placeholder={t("common.selectEducationLevel")} />
                 </SelectTrigger>
                 <SelectContent>
                   {educationLevels.map((level) => (
@@ -358,29 +360,29 @@ export function ProfileForm() {
         <CardHeader>
           <CardTitle className="flex items-center">
             <Home className="h-5 w-5 mr-2" />
-            Family & Additional Information
+            {t("common.familyAndAdditionalInformation")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <Label htmlFor="familySize">Family Size</Label>
+              <Label htmlFor="familySize">{t("common.familySize")}</Label>
               <Input
                 id="familySize"
                 type="number"
                 {...form.register("familySize", { valueAsNumber: true })}
-                placeholder="Number of family members"
+                placeholder={t("common.numberOfFamilyMembers")}
                 min="1"
                 data-testid="input-family-size"
               />
             </div>
 
             <div>
-              <Label htmlFor="bankAccount">Bank Account Number</Label>
+              <Label htmlFor="bankAccount">{t("common.bankAccountNumber")}</Label>
               <Input
                 id="bankAccount"
                 {...form.register("bankAccount")}
-                placeholder="Bank account for DBT"
+                placeholder={t("common.bankAccountForDBT")}
                 data-testid="input-bank-account"
               />
             </div>
@@ -396,16 +398,16 @@ export function ProfileForm() {
                 onCheckedChange={(checked) => form.setValue("hasDisability", !!checked)}
                 data-testid="checkbox-has-disability"
               />
-              <Label htmlFor="hasDisability">I have a disability</Label>
+              <Label htmlFor="hasDisability">{t("common.iHaveADisability")}</Label>
             </div>
 
             {form.watch("hasDisability") && (
               <div>
-                <Label htmlFor="disabilityType">Type of Disability</Label>
+                <Label htmlFor="disabilityType">{t("common.typeOfDisability")}</Label>
                 <Input
                   id="disabilityType"
                   {...form.register("disabilityType")}
-                  placeholder="Specify type of disability"
+                  placeholder={t("common.specifyTypeOfDisability")}
                   data-testid="input-disability-type"
                 />
               </div>
@@ -413,11 +415,11 @@ export function ProfileForm() {
           </div>
 
           <div>
-            <Label htmlFor="additionalDetails">Additional Details</Label>
+            <Label htmlFor="additionalDetails">{t("common.additionalDetails")}</Label>
             <Textarea
               id="additionalDetails"
               {...form.register("additionalDetails")}
-              placeholder="Any additional information that might help with scheme recommendations..."
+              placeholder={t("common.additionalInfoForSchemeRecommendations")}
               rows={3}
               data-testid="textarea-additional-details"
             />
@@ -431,20 +433,20 @@ export function ProfileForm() {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Heart className="h-5 w-5 mr-2" />
-              Profile Completeness
+              {t("common.profileCompleteness")}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2 mb-4">
-              {form.watch("fullName") && <Badge variant="secondary">Name ✓</Badge>}
-              {form.watch("state") && <Badge variant="secondary">Location ✓</Badge>}
-              {form.watch("annualIncome") && <Badge variant="secondary">Income ✓</Badge>}
-              {form.watch("category") && <Badge variant="secondary">Category ✓</Badge>}
-              {form.watch("occupation") && <Badge variant="secondary">Occupation ✓</Badge>}
-              {form.watch("education") && <Badge variant="secondary">Education ✓</Badge>}
+              {form.watch("fullName") && <Badge variant="secondary">{t("common.fullName")} ✓</Badge>}
+              {form.watch("state") && <Badge variant="secondary">{t("common.state")} ✓</Badge>}
+              {form.watch("annualIncome") && <Badge variant="secondary">{t("common.annualIncome")} ✓</Badge>}
+              {form.watch("category") && <Badge variant="secondary">{t("common.category")} ✓</Badge>}
+              {form.watch("occupation") && <Badge variant="secondary">{t("common.occupation")} ✓</Badge>}
+              {form.watch("education") && <Badge variant="secondary">{t("common.educationLevel")} ✓</Badge>}
             </div>
             <p className="text-sm text-muted-foreground">
-              Complete more fields to get better AI-powered scheme recommendations.
+              {t("common.completeMoreFields")}
             </p>
           </CardContent>
         </Card>
@@ -460,12 +462,12 @@ export function ProfileForm() {
           {profileMutation.isPending ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Saving...
+              {t("common.saving")}
             </>
           ) : (
             <>
               <Save className="mr-2 h-4 w-4" />
-              {profile ? "Update Profile" : "Save Profile"}
+              {profile ? t("common.updateProfile") : t("common.saveProfile")}
             </>
           )}
         </Button>

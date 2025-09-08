@@ -7,6 +7,51 @@ interface SpeechRecognitionOptions {
   onEnd?: () => void;
 }
 
+// Web Speech API type declarations
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
+
+interface SpeechRecognitionEvent extends Event {
+  resultIndex: number;
+  results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionErrorEvent extends Event {
+  error: string;
+}
+
+interface SpeechRecognitionResultList {
+  length: number;
+  [index: number]: SpeechRecognitionResult;
+}
+
+interface SpeechRecognitionResult {
+  length: number;
+  [index: number]: SpeechRecognitionAlternative;
+  isFinal: boolean;
+}
+
+interface SpeechRecognitionAlternative {
+  transcript: string;
+  confidence: number;
+}
+
+interface SpeechRecognition extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  onend: (() => void) | null;
+  start(): void;
+  stop(): void;
+  abort(): void;
+}
+
 class SpeechService {
   private recognition: SpeechRecognition | null = null;
 
@@ -19,8 +64,12 @@ class SpeechService {
       return null;
     }
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    this.recognition = new SpeechRecognition();
+    const SpeechRecognitionConstructor = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    this.recognition = new SpeechRecognitionConstructor();
+
+    if (!this.recognition) {
+      return null;
+    }
 
     // Configure recognition
     this.recognition.continuous = options.continuous ?? false;
@@ -28,7 +77,7 @@ class SpeechService {
     this.recognition.lang = this.getLanguageCode(options.language || 'en');
 
     // Event handlers
-    this.recognition.onresult = (event) => {
+    this.recognition.onresult = (event: SpeechRecognitionEvent) => {
       let finalTranscript = '';
       let interimTranscript = '';
 
@@ -47,9 +96,9 @@ class SpeechService {
       }
     };
 
-    this.recognition.onerror = (event) => {
+    this.recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       let errorMessage = 'Speech recognition error';
-      
+
       switch (event.error) {
         case 'no-speech':
           errorMessage = 'No speech detected. Please try again.';
@@ -66,7 +115,7 @@ class SpeechService {
         default:
           errorMessage = `Speech recognition error: ${event.error}`;
       }
-      
+
       options.onError?.(errorMessage);
     };
 
@@ -131,8 +180,8 @@ class SpeechService {
 // Extend the Window interface to include speech recognition
 declare global {
   interface Window {
-    SpeechRecognition: typeof SpeechRecognition;
-    webkitSpeechRecognition: typeof SpeechRecognition;
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
   }
 }
 

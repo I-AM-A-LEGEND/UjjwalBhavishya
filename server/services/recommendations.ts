@@ -1,6 +1,6 @@
 import { storage } from "../storage";
 
-import { schemeService } from "./schemes";
+import { schemeService, EligibilityResult } from "./schemes";
 import { type CitizenProfile, type Scheme, type InsertRecommendation } from "@shared/schema";
 
 export interface RecommendationWithScheme {
@@ -10,6 +10,7 @@ export interface RecommendationWithScheme {
   score: number;
   reasoning: string;
   eligibilityStatus: string;
+  eligibilityDetails: EligibilityResult;
   generatedAt: Date;
 }
 
@@ -25,32 +26,35 @@ export class RecommendationService {
       const allSchemes = await storage.getAllSchemes();
       await storage.deleteRecommendationsByUserId(userId);
 
-      const recommendations = allSchemes.map(scheme => {
-        const score = this.calculateSchemeScore(citizenProfile, scheme);
-        return { scheme, score };
-      });
+      const recommendationsWithEligibility = await Promise.all(allSchemes.map(async (scheme) => {
+        const eligibility = await schemeService.checkEligibility(citizenProfile, scheme);
+        // Use eligibility score as the primary score for recommendation
+        return { scheme, score: eligibility.score, eligibilityDetails: eligibility };
+      }));
 
-      const sortedRecommendations = recommendations.sort((a, b) => b.score - a.score);
+      const sortedRecommendations = recommendationsWithEligibility.sort((a, b) => b.score - a.score);
 
-      const topRecommendations = sortedRecommendations.slice(0, 10);
+      const topRecommendations = sortedRecommendations.slice(0, 10); // Get top 10 recommendations
 
       const storedRecommendations: RecommendationWithScheme[] = [];
       for (const rec of topRecommendations) {
+        // Only store recommendations with a score > 0 (meaning some criteria matched)
         if (rec.score > 0) {
           const insertRec: InsertRecommendation = {
             userId,
             schemeId: rec.scheme.id,
             score: rec.score,
-            reason: "This scheme is a good match for your profile based on our analysis.",
+            reason: rec.eligibilityDetails.eligible ? "You are eligible for this scheme." : "You are partially eligible for this scheme.",
           };
 
           const storedRec = await storage.createRecommendation(insertRec);
           storedRecommendations.push({
             ...storedRec,
             scheme: rec.scheme,
-            reasoning: storedRec.reason,
-            eligibilityStatus: "pending",
-            generatedAt: storedRec.createdAt,
+            reasoning: storedRec.reason || "", // Ensure reasoning is not null
+            eligibilityStatus: rec.eligibilityDetails.eligible ? "eligible" : "partially_eligible",
+            eligibilityDetails: rec.eligibilityDetails,
+            generatedAt: storedRec.createdAt as Date, // Assert as Date
           });
         }
       }
@@ -66,11 +70,11 @@ export class RecommendationService {
   private calculateSchemeScore(profile: CitizenProfile, scheme: Scheme): number {
     let score = 0;
 
-    if (scheme.targetCategories && scheme.targetCategories.includes(profile.category)) {
+    if (Array.isArray(scheme.targetCategories) && scheme.targetCategories.includes(profile.category)) {
       score += 20;
     }
 
-    if (scheme.targetOccupations && scheme.targetOccupations.includes(profile.occupation)) {
+    if (Array.isArray(scheme.targetOccupations) && scheme.targetOccupations.includes(profile.occupation)) {
       score += 20;
     }
 
@@ -106,10 +110,21 @@ export class RecommendationService {
     for (const rec of recommendations) {
       const scheme = await storage.getSchemeById(rec.schemeId);
       if (scheme) {
+        // Re-check eligibility to get fresh details, or retrieve if stored
+        const citizenProfile = await storage.getCitizenProfile(userId);
+        let eligibilityDetails: EligibilityResult = { eligible: false, score: 0, reasons: [], missingCriteria: [] };
+        if (citizenProfile) {
+          eligibilityDetails = await schemeService.checkEligibility(citizenProfile, scheme);
+        }
+
         enrichedRecommendations.push({
           ...rec,
           scheme,
-          score: parseFloat(rec.score)
+          score: rec.score, // Changed from parseFloat(rec.score)
+          reasoning: rec.reason || "", // Ensure reasoning is not null
+          eligibilityStatus: eligibilityDetails.eligible ? "eligible" : "partially_eligible",
+          eligibilityDetails: eligibilityDetails,
+          generatedAt: rec.createdAt as Date, // Assert as Date
         });
       }
     }

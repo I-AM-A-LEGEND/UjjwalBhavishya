@@ -14,7 +14,7 @@ export default function Home() {
 
   const { data: popularSchemes = [], isLoading: schemesLoading } = useQuery({
     queryKey: ["/api/schemes/popular"],
-  });
+  }) as { data: any[], isLoading: boolean };
 
   const { data: categories = [] } = useQuery({
     queryKey: ["/api/schemes/categories"],

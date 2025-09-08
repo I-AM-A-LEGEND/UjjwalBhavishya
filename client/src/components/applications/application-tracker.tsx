@@ -25,7 +25,13 @@ interface ApplicationStatus {
 export function ApplicationTracker() {
   const [searchQuery, setSearchQuery] = useState("");
   const [trackedApplication, setTrackedApplication] = useState<ApplicationStatus | null>(null);
-  const { lastMessage, isConnected } = useWebSocket("ws://localhost:3000/ws");
+  const [lastMessage, setLastMessage] = useState<any>(null);
+
+  const { isConnected, sendMessage } = useWebSocket({
+    onMessage: (data) => {
+      setLastMessage(data);
+    }
+  });
 
   useEffect(() => {
     if (lastMessage) {

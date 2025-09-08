@@ -3,11 +3,26 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from 'react-i18next';
 
 export function Header() {
+  const { user, logout } = useAuth();
   const [, navigate] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [language, setLanguage] = useState("en");
+  const [language, setLanguage] = useState(user?.preferredLanguage || "en");
+  const { toast } = useToast();
+  const { t, i18n } = useTranslation();
+
+  useEffect(() => {
+    if (user?.preferredLanguage) {
+      setLanguage(user.preferredLanguage);
+    }
+  }, [user?.preferredLanguage]);
 
   const languages = [
     { code: "en", name: "English" },
@@ -25,10 +40,10 @@ export function Header() {
   ];
 
   const navigationItems = [
-    { label: "Home", path: "/" },
-    { label: "Find Schemes", path: "/schemes" },
-    { label: "My Applications", path: "/applications" },
-    { label: "Help", path: "/help" }
+    { label: t("common.home"), path: "/" },
+    { label: t("common.findSchemes"), path: "/schemes" },
+    { label: t("common.myApplications"), path: "/applications" },
+    { label: t("common.help"), path: "/help" }
   ];
 
   return (
@@ -60,7 +75,10 @@ export function Header() {
           
           {/* Language Selector and Auth */}
           <div className="flex items-center space-x-3">
-            <Select value={language} onValueChange={setLanguage}>
+            <Select value={language} onValueChange={(value) => {
+              setLanguage(value);
+              i18n.changeLanguage(value);
+            }}>
               <SelectTrigger className="w-32" data-testid="select-language">
                 <SelectValue />
               </SelectTrigger>
@@ -73,13 +91,33 @@ export function Header() {
               </SelectContent>
             </Select>
             
-            <Button 
-              onClick={() => navigate("/profile")}
-              data-testid="button-login-register"
-              className="hidden sm:flex"
-            >
-              Login / Register
-            </Button>
+            {user ? (
+              <>
+                <Button 
+                  onClick={() => navigate("/profile")}
+                  data-testid="button-my-profile"
+                  className="hidden sm:flex"
+                >
+                  My Profile
+                </Button>
+                <Button 
+                  onClick={logout}
+                  data-testid="button-logout"
+                  variant="outline"
+                  className="hidden sm:flex"
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Button 
+                onClick={() => navigate("/profile")}
+                data-testid="button-login-register"
+                className="hidden sm:flex"
+              >
+                Login / Register
+              </Button>
+            )}
 
             {/* Mobile Menu Toggle */}
             <Button
@@ -111,16 +149,42 @@ export function Header() {
                   {item.label}
                 </button>
               ))}
-              <Button 
-                onClick={() => {
-                  navigate("/profile");
-                  setIsMobileMenuOpen(false);
-                }}
-                className="w-full sm:hidden mt-3"
-                data-testid="button-mobile-login-register"
-              >
-                Login / Register
-              </Button>
+              {user ? (
+                <>
+                  <Button 
+                    onClick={() => {
+                      navigate("/profile");
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full sm:hidden mt-3"
+                    data-testid="button-mobile-my-profile"
+                  >
+                    My Profile
+                  </Button>
+                  <Button 
+                    onClick={() => {
+                      logout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full sm:hidden mt-3"
+                    variant="outline"
+                    data-testid="button-mobile-logout"
+                  >
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <Button 
+                  onClick={() => {
+                    navigate("/profile");
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="w-full sm:hidden mt-3"
+                  data-testid="button-mobile-login-register"
+                >
+                  Login / Register
+                </Button>
+              )}
             </nav>
           </div>
         )}
