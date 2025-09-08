@@ -135,7 +135,7 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
   };
 
   const formatIncomeLimit = (amount: number | null) => {
-    if (!amount) return "No limit";
+    if (!amount) return t("common.noLimit");
     if (amount >= 100000) {
       return `₹${(amount / 100000).toFixed(1)} Lakh`;
     }
@@ -187,10 +187,10 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
                 ) : (
                   <AlertCircle className="h-4 w-4 mr-2" />
                 )}
-                {recommendation.eligibilityStatus === "eligible" ? "Highly Recommended" : "Partially Eligible"}
+                {recommendation.eligibilityStatus === "eligible" ? t("common.highlyRecommended") : t("common.partiallyEligible")}
               </span>
               <Badge variant="outline" className="text-xs">
-                {Math.round(recommendation.score * 100)}% match
+                {Math.round(recommendation.score * 100)}% {t("common.match")}
               </Badge>
             </div>
             {isExpanded && (
@@ -208,7 +208,7 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
 
         {/* Benefits */}
         <div className="mb-3">
-          <h4 className="font-medium text-sm mb-1">Benefits:</h4>
+          <h4 className="font-medium text-sm mb-1">{t("common.benefits")}:</h4>
           <p className="text-sm text-muted-foreground">
             {scheme.benefits}
           </p>
@@ -222,7 +222,7 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
             </Badge>
             {scheme.maxIncome && (
               <Badge variant="outline" className="text-xs">
-                Max Income: {formatIncomeLimit(scheme.maxIncome)}
+                {t("common.maxIncome")}: {formatIncomeLimit(scheme.maxIncome)}
               </Badge>
             )}
             {scheme.state ? (
@@ -231,7 +231,7 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
               </Badge>
             ) : (
               <Badge variant="outline" className="text-xs">
-                All India
+                {t("common.allIndia")}
               </Badge>
             )}
           </div>
@@ -242,7 +242,7 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
           <div className="mb-3">
             <p className="text-xs text-muted-foreground flex items-center">
               <Users className="h-3 w-3 mr-1" />
-              Eligible Categories: {scheme.targetCategories.join(", ")}
+              {t("common.eligibleCategories")}: {scheme.targetCategories.join(", ")}
             </p>
           </div>
         )}
@@ -256,7 +256,7 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
             className="text-xs p-0 h-auto mb-3"
             data-testid={`button-toggle-details-${scheme.id}`}
           >
-            {isExpanded ? "Hide Details" : "Show AI Analysis"}
+            {isExpanded ? t("common.hideDetails") : t("common.showAIAnalysis")}
           </Button>
         )}
 
@@ -271,7 +271,7 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
               className="flex-1"
               data-testid={`button-check-eligibility-${scheme.id}`}
             >
-              {checkEligibilityMutation.isPending ? "Checking..." : "Check Eligibility"}
+              {checkEligibilityMutation.isPending ? t("common.checking") : t("common.checkEligibility")}
             </Button>
           )}
           
@@ -282,7 +282,7 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
             className={`${showEligibilityButton ? 'sm:col-span-1' : 'sm:col-span-2'} flex items-center justify-center`}
             data-testid={`button-apply-${scheme.id}`}
           >
-            {applyMutation.isPending ? "Applying..." : "Apply Now"}
+            {applyMutation.isPending ? t("common.applying") : t("common.applyNow")}
             {scheme.applicationUrl && <ExternalLink className="h-3 w-3 ml-1" />}
           </Button>
           
@@ -300,7 +300,7 @@ export function SchemeCard({ scheme, recommendation, showEligibilityButton = fal
             data-testid={`button-status-${scheme.id}`}
           >
             <FileText className="h-3 w-3 mr-1" />
-            Check Status
+            {t("common.checkStatus")}
             <ExternalLink className="h-3 w-3 ml-1" />
           </Button>
         </div>
