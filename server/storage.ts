@@ -1,14 +1,12 @@
-import { 
-  type User, type InsertUser, type CitizenProfile, type InsertCitizenProfile,
-  type Scheme, type InsertScheme, type Application, type InsertApplication,
-  type Recommendation, type InsertRecommendation, type ChatConversation, 
-  type InsertChatConversation, type ChatMessage, type InsertChatMessage,
-  type Grievance, type InsertGrievance
-} from "@shared/schema";
 import { randomUUID } from "crypto";
+import type { User, CitizenProfile, Scheme, Application, Recommendation, ChatConversation, ChatMessage, Grievance } from "@shared/schema";
+import type {
+  InsertUser, InsertCitizenProfile, InsertScheme, InsertApplication, 
+  InsertRecommendation, InsertChatConversation, InsertChatMessage, InsertGrievance
+} from "@shared/schema";
 
 export interface IStorage {
-  // User management
+  // Users
   getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
@@ -17,7 +15,7 @@ export interface IStorage {
   // Citizen profiles
   getCitizenProfile(userId: string): Promise<CitizenProfile | undefined>;
   createCitizenProfile(profile: InsertCitizenProfile): Promise<CitizenProfile>;
-  updateCitizenProfile(userId: string, profile: Partial<InsertCitizenProfile>): Promise<CitizenProfile | undefined>;
+  updateCitizenProfile(userId: string, updates: Partial<InsertCitizenProfile>): Promise<CitizenProfile | undefined>;
   
   // Schemes
   getAllSchemes(): Promise<Scheme[]>;
@@ -29,9 +27,8 @@ export interface IStorage {
   
   // Applications
   getApplicationsByUserId(userId: string): Promise<Application[]>;
-  getApplicationById(id: string): Promise<Application | undefined>;
   createApplication(application: InsertApplication): Promise<Application>;
-  updateApplicationStatus(id: string, status: string, remarks?: string): Promise<Application | undefined>;
+  getApplicationById(id: string): Promise<Application | undefined>;
   
   // Recommendations
   getRecommendationsByUserId(userId: string): Promise<Recommendation[]>;
@@ -65,7 +62,7 @@ export class MemStorage implements IStorage {
   }
 
   private initializeSampleData() {
-    // Initialize with some sample government schemes
+    // Initialize with comprehensive government schemes
     const sampleSchemes: InsertScheme[] = [
       {
         name: "PM Kisan Samman Nidhi",
@@ -131,6 +128,116 @@ export class MemStorage implements IStorage {
         maxAge: null,
         targetCategories: ["General", "OBC", "SC", "ST"],
         targetOccupations: null
+      },
+      {
+        name: "Pradhan Mantri Jan Dhan Yojana (PMJDY)",
+        description: "National Mission for Financial Inclusion to ensure access to financial services including Banking, Savings, Remittance, Credit, Insurance, and Pension",
+        category: "Banking",
+        ministry: "Ministry of Finance",
+        state: null,
+        eligibilityCriteria: {
+          age: "Minimum 10 years",
+          documents: "Any officially valid document (OVD)",
+          citizenship: "Indian citizen or eligible person"
+        },
+        benefits: "Zero balance account, RuPay Debit Card, ₹1 lakh accident insurance, ₹30,000 life cover, Overdraft facility up to ₹10,000",
+        applicationProcess: "Visit any bank branch or Business Correspondent outlet with valid documents",
+        documents: ["Aadhaar Card", "Voter ID", "Driving License", "PAN Card", "Passport"],
+        applicationUrl: "https://www.pmjdy.gov.in/",
+        isActive: true,
+        maxIncome: null,
+        minAge: 10,
+        maxAge: null,
+        targetCategories: ["General", "OBC", "SC", "ST", "EWS"],
+        targetOccupations: null
+      },
+      {
+        name: "PM Vishwakarma",
+        description: "End-to-end support to artisans and craftspeople working with their hands and tools",
+        category: "Employment",
+        ministry: "Ministry of Micro, Small & Medium Enterprises",
+        state: null,
+        eligibilityCriteria: {
+          occupation: "Artisans and craftspeople in 18 traditional trades",
+          age: "18 years or above",
+          engagement: "Must be engaged in relevant trade"
+        },
+        benefits: "Skill training, toolkit incentive, credit support up to ₹3 lakh, digital payments promotion, marketing support",
+        applicationProcess: "Register through Common Service Centers or online portal with biometric verification",
+        documents: ["Aadhaar Card", "Mobile Number", "Bank Account Details"],
+        applicationUrl: "https://pmvishwakarma.gov.in/",
+        isActive: true,
+        maxIncome: null,
+        minAge: 18,
+        maxAge: null,
+        targetCategories: ["General", "OBC", "SC", "ST"],
+        targetOccupations: ["Carpenter", "Blacksmith", "Goldsmith", "Potter", "Sculptor", "Other Artisan"]
+      },
+      {
+        name: "Pradhan Mantri Jeevan Jyoti Bima Yojana (PMJJBY)",
+        description: "One year cover renewable life insurance scheme providing death coverage",
+        category: "Insurance",
+        ministry: "Ministry of Finance",
+        state: null,
+        eligibilityCriteria: {
+          age: "18 to 50 years for joining",
+          account: "Savings bank account holder",
+          premium: "Auto-debit consent for premium"
+        },
+        benefits: "₹2 lakh death coverage for any reason, renewable every year till age 55",
+        applicationProcess: "Apply through participating banks with auto-debit mandate",
+        documents: ["Aadhaar Card", "Bank Account Details", "Consent Form"],
+        applicationUrl: "https://www.jansuraksha.gov.in/",
+        isActive: true,
+        maxIncome: null,
+        minAge: 18,
+        maxAge: 50,
+        targetCategories: ["General", "OBC", "SC", "ST", "EWS"],
+        targetOccupations: null
+      },
+      {
+        name: "Pradhan Mantri Matritva Vandana Yojana",
+        description: "Conditional cash transfer scheme for pregnant and lactating mothers",
+        category: "Women & Child",
+        ministry: "Ministry of Women and Child Development",
+        state: null,
+        eligibilityCriteria: {
+          pregnancy: "First living child",
+          age: "19 years or above",
+          registration: "Registered at Anganwadi Centre"
+        },
+        benefits: "₹5,000 in three installments during pregnancy and lactation period",
+        applicationProcess: "Register at nearest Anganwadi Centre or health facility",
+        documents: ["Mother and Child Protection Card", "Aadhaar Card", "Bank Account Details"],
+        applicationUrl: "https://wcd.nic.in/",
+        isActive: true,
+        maxIncome: null,
+        minAge: 19,
+        maxAge: null,
+        targetCategories: ["General", "OBC", "SC", "ST", "EWS"],
+        targetOccupations: null
+      },
+      {
+        name: "Atmanirbhar Bharat Rozgar Yojana",
+        description: "Employment generation scheme to boost employment in formal sector and support employees and employers",
+        category: "Employment",
+        ministry: "Ministry of Labour and Employment",
+        state: null,
+        eligibilityCriteria: {
+          employment: "New employees earning up to ₹15,000 monthly",
+          establishment: "Registered establishments with EPFO",
+          period: "Employment from October 1, 2020"
+        },
+        benefits: "Government contribution to EPF for eligible employees and employers",
+        applicationProcess: "Automatic enrollment through EPFO for eligible establishments",
+        documents: ["EPF Registration", "Employee Details", "Salary Records"],
+        applicationUrl: "https://www.epfindia.gov.in/",
+        isActive: true,
+        maxIncome: 180000,
+        minAge: 18,
+        maxAge: null,
+        targetCategories: ["General", "OBC", "SC", "ST", "EWS"],
+        targetOccupations: ["Private Employee", "Skilled Worker"]
       }
     ];
 
@@ -282,10 +389,6 @@ export class MemStorage implements IStorage {
     return Array.from(this.applications.values()).filter(app => app.userId === userId);
   }
 
-  async getApplicationById(id: string): Promise<Application | undefined> {
-    return this.applications.get(id);
-  }
-
   async createApplication(insertApplication: InsertApplication): Promise<Application> {
     const id = randomUUID();
     const application: Application = {
@@ -293,33 +396,15 @@ export class MemStorage implements IStorage {
       id,
       appliedAt: new Date(),
       lastUpdated: new Date(),
-      status: insertApplication.status || "submitted",
-      statusHistory: [{ status: insertApplication.status || "submitted", timestamp: new Date() }],
-      documents: insertApplication.documents || null,
-      applicationId: insertApplication.applicationId || null,
-      amount: insertApplication.amount || null,
-      remarks: insertApplication.remarks || null
+      statusHistory: [],
+      status: insertApplication.status || "submitted"
     };
     this.applications.set(id, application);
     return application;
   }
 
-  async updateApplicationStatus(id: string, status: string, remarks?: string): Promise<Application | undefined> {
-    const existing = this.applications.get(id);
-    if (!existing) return undefined;
-    
-    const statusHistory = existing.statusHistory as any[] || [];
-    statusHistory.push({ status, timestamp: new Date(), remarks });
-    
-    const updated: Application = { 
-      ...existing, 
-      status, 
-      remarks: remarks || existing.remarks,
-      lastUpdated: new Date(),
-      statusHistory 
-    };
-    this.applications.set(id, updated);
-    return updated;
+  async getApplicationById(id: string): Promise<Application | undefined> {
+    return this.applications.get(id);
   }
 
   // Recommendations
@@ -340,8 +425,9 @@ export class MemStorage implements IStorage {
   }
 
   async deleteRecommendationsByUserId(userId: string): Promise<void> {
-    const userRecommendations = await this.getRecommendationsByUserId(userId);
-    userRecommendations.forEach(rec => this.recommendations.delete(rec.id));
+    Array.from(this.recommendations.entries())
+      .filter(([_, rec]) => rec.userId === userId)
+      .forEach(([id]) => this.recommendations.delete(id));
   }
 
   // Chat
@@ -355,9 +441,7 @@ export class MemStorage implements IStorage {
       ...insertConversation,
       id,
       startedAt: new Date(),
-      lastActiveAt: new Date(),
-      language: insertConversation.language || "en",
-      userId: insertConversation.userId || null
+      lastActiveAt: new Date()
     };
     this.chatConversations.set(id, conversation);
     return conversation;
@@ -366,7 +450,7 @@ export class MemStorage implements IStorage {
   async getChatMessages(conversationId: string): Promise<ChatMessage[]> {
     return Array.from(this.chatMessages.values())
       .filter(msg => msg.conversationId === conversationId)
-      .sort((a, b) => a.timestamp!.getTime() - b.timestamp!.getTime());
+      .sort((a, b) => (a.timestamp?.getTime() || 0) - (b.timestamp?.getTime() || 0));
   }
 
   async createChatMessage(insertMessage: InsertChatMessage): Promise<ChatMessage> {
@@ -375,17 +459,9 @@ export class MemStorage implements IStorage {
       ...insertMessage,
       id,
       timestamp: new Date(),
-      contentType: insertMessage.contentType || "text"
+      contentType: insertMessage.contentType || null
     };
     this.chatMessages.set(id, message);
-
-    // Update conversation last active time
-    const conversation = this.chatConversations.get(insertMessage.conversationId);
-    if (conversation) {
-      conversation.lastActiveAt = new Date();
-      this.chatConversations.set(conversation.id, conversation);
-    }
-
     return message;
   }
 
@@ -400,12 +476,7 @@ export class MemStorage implements IStorage {
       ...insertGrievance,
       id,
       createdAt: new Date(),
-      resolvedAt: null,
-      status: insertGrievance.status || "open",
-      priority: insertGrievance.priority || "medium",
-      assignedTo: insertGrievance.assignedTo || null,
-      resolution: insertGrievance.resolution || null,
-      applicationId: insertGrievance.applicationId || null
+      status: insertGrievance.status || "open"
     };
     this.grievances.set(id, grievance);
     return grievance;
@@ -415,11 +486,10 @@ export class MemStorage implements IStorage {
     const existing = this.grievances.get(id);
     if (!existing) return undefined;
     
-    const updated: Grievance = { 
-      ...existing, 
-      status, 
-      resolution: resolution || existing.resolution,
-      resolvedAt: status === "resolved" ? new Date() : existing.resolvedAt
+    const updated: Grievance = {
+      ...existing,
+      status,
+      resolution: resolution || existing.resolution
     };
     this.grievances.set(id, updated);
     return updated;
