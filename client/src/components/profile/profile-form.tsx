@@ -171,7 +171,7 @@ export function ProfileForm({ userId }: { userId: string }) {
         <CardHeader>
           <CardTitle className="flex items-center">
             <User className="h-5 w-5 mr-2" />
-            Personal Information
+            {t("common.personalInformation")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
